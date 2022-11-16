@@ -15,8 +15,12 @@ import (
 )
 
 const (
-	// Blockchain is Optimism.
-	Blockchain string = "Optimism"
+	// DefaultBlockchain is Optimism.
+	DefaultBlockchain string = "Optimism"
+
+	// BlockchainEnv is the environment variable
+	// read to determine the blockchain.
+	BlockchainEnv = "BLOCKCHAIN"
 
 	// Symbol is the symbol value
 	// used in Currency.
@@ -47,7 +51,7 @@ const (
 	GenesisBlockHashEnv = "GENESIS_BLOCK_HASH"
 
 	// ChainConfigEnv is the environment variable from
-	// which to read the chain configuration, defined in
+	// which to read the chain configuration, defined as
 	// JSON (or pointing to a JSON file).
 	ChainConfigEnv = "CHAIN_CONFIG"
 
@@ -61,8 +65,10 @@ const (
 	// using our token white list
 	FilterTokensEnv = "FILTER"
 
-	// TokenListFile is the filename from which to read the list of tokens.
-	TokenListFile = "tokenList.json"
+	// TokenListEnv is the environment variable
+	// from which to read the list of tokens, defined
+	// as JSON (or pointing to a JSON file).
+	TokenListEnv = "TOKENS"
 
 	// GethEnv is an optional environment variable
 	// used to connect rosetta-ethereum to an already
@@ -102,6 +108,11 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		return nil, fmt.Errorf("%s is not a valid mode", modeValue)
 	}
 
+	blockchain := os.Getenv(BlockchainEnv)
+	if blockchain == "" {
+		blockchain = DefaultBlockchain
+	}
+
 	networkValue := os.Getenv(NetworkEnv)
 	genesisBlockHash := &RosettaTypes.BlockIdentifier{
 		Index: GenesisBlockIndex,
@@ -121,7 +132,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 	}
 
 	config.Network = &types.NetworkIdentifier{
-		Blockchain: Blockchain,
+		Blockchain: blockchain,
 		Network:    networkValue,
 	}
 	config.GenesisBlockIdentifier = genesisBlockHash
@@ -164,14 +175,19 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		}
 	}
 
-	content, err := os.ReadFile(TokenListFile)
-	if err != nil {
-		return nil, fmt.Errorf("error opening %s: %w", TokenListFile, err)
+	tokenListJson := os.Getenv(TokenListEnv)
+	if file, err := os.ReadFile(tokenListJson); err == nil {
+		// if the envvar points to a file, read it; otherwise the envvar contents is expected to be JSON
+		tokenListJson = string(file)
 	}
+	if tokenListJson == "" {
+		tokenListJson = "[]"
+	}
+
 	var payload []configuration.Token
-	err = json.Unmarshal(content, &payload)
+	err = json.Unmarshal([]byte(tokenListJson), &payload)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing %s: %w", TokenListFile, err)
+		return nil, fmt.Errorf("error parsing %s: %w", tokenListJson, err)
 	}
 
 	config.RosettaCfg = configuration.RosettaConfig{
