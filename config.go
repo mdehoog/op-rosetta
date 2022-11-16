@@ -103,7 +103,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 	case Offline:
 		config.Mode = Offline
 	case "":
-		return nil, errors.New("MODE must be populated")
+		return nil, fmt.Errorf("%s must be populated", ModeEnv)
 	default:
 		return nil, fmt.Errorf("%s is not a valid mode", modeValue)
 	}
@@ -123,6 +123,9 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 	if file, err := os.ReadFile(chainConfigJson); err == nil {
 		// if the envvar points to a file, read it; otherwise the envvar contents is expected to be JSON
 		chainConfigJson = string(file)
+	}
+	if chainConfigJson == "" {
+		return nil, fmt.Errorf("%s not set", ChainConfigEnv)
 	}
 
 	chainConfig := &params.ChainConfig{}
