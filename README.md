@@ -5,7 +5,7 @@
 ### Running
 
 ```
-go install github.com/mdehoog/op-rosetta
+make build
 export CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'
-MODE=ONLINE PORT=5000 NETWORK=mainnet GETH=https://mainnet.optimism.io op-rosetta
+MODE=ONLINE PORT=5000 NETWORK=mainnet GETH=https://mainnet.optimism.io bin/op-rosetta
 ```
