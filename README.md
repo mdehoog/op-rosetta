@@ -1,6 +1,6 @@
 # op-rosetta
 
-`op-rosetta` is a Rosetta-compatible API for Optimism Bedrock. It is based on github.com/coinbase/rosetta-geth-sdk.
+`op-rosetta` is a Rosetta-compatible API for Optimism Bedrock. It is based on [coinbase/rosetta-geth-sdk](https://github.com/coinbase/rosetta-geth-sdk).
 
 ### Running
 
