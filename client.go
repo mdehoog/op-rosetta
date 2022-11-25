@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/coinbase/rosetta-geth-sdk/configuration"
 	"math/big"
+	"strings"
+
+	"github.com/coinbase/rosetta-geth-sdk/configuration"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
@@ -14,6 +16,7 @@ import (
 	"github.com/coinbase/rosetta-geth-sdk/services"
 	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
 	"github.com/coinbase/rosetta-sdk-go/types"
+	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
 	EthTypes "github.com/ethereum/go-ethereum/core/types"
 )
 
@@ -21,10 +24,46 @@ type OpClient struct {
 	*evmClient.SDKClient
 }
 
+const (
+	L1ToL2DepositType = 126
+)
+
 func (c *OpClient) ParseOps(
 	tx *evmClient.LoadedTransaction,
 ) ([]*types.Operation, error) {
 	var ops []*types.Operation
+
+	if tx.Receipt.Type == L1ToL2DepositType && len(tx.Trace) > 0 {
+		trace := tx.Trace[0]
+		traceType := strings.ToUpper(trace.Type)
+		opStatus := sdkTypes.SuccessStatus
+		from := evmClient.MustChecksum(trace.From.String())
+		to := evmClient.MustChecksum(trace.To.String())
+		metadata := map[string]interface{}{}
+
+		if from != to {
+			feeOps := services.FeeOps(tx)
+			ops = append(ops, feeOps...)
+		}
+
+		toOp := &RosettaTypes.Operation{
+			OperationIdentifier: &RosettaTypes.OperationIdentifier{
+				Index: int64(len(ops) + 0),
+			},
+			Type:   traceType,
+			Status: RosettaTypes.String(opStatus),
+			Account: &RosettaTypes.AccountIdentifier{
+				Address: to,
+			},
+			Amount: &RosettaTypes.Amount{
+				Value:    trace.Value.String(),
+				Currency: sdkTypes.Currency,
+			},
+			Metadata: metadata,
+		}
+		ops = append(ops, toOp)
+		return ops, nil
+	}
 
 	feeOps := services.FeeOps(tx)
 	ops = append(ops, feeOps...)
@@ -71,6 +110,7 @@ func (c *OpClient) GetBlockReceipts(
 		feeAmount := new(big.Int).Mul(gasUsed, gasPrice)
 
 		receipt := &evmClient.RosettaTxReceipt{
+			Type: ethReceipts[i].Type,
 			GasPrice:       gasPrice,
 			GasUsed:        gasUsed,
 			Logs:           ethReceipts[i].Logs,

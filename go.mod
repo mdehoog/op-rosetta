@@ -3,9 +3,9 @@ module github.com/mdehoog/op-rosetta
 go 1.18
 
 require (
-	github.com/coinbase/rosetta-geth-sdk v0.0.3
+	github.com/coinbase/rosetta-geth-sdk v0.0.4
 	github.com/coinbase/rosetta-sdk-go v0.7.11
-	github.com/ethereum/go-ethereum v1.10.21
+	github.com/ethereum/go-ethereum v1.10.26
 )
 
 require (
@@ -55,4 +55,4 @@ require (
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 )
 
-replace github.com/ethereum/go-ethereum v1.10.21 => github.com/ethereum-optimism/op-geth v0.0.0-20221104231810-30db39cae2be
+replace github.com/ethereum/go-ethereum v1.10.26 => github.com/ethereum-optimism/op-geth v0.0.0-20221104231810-30db39cae2be
