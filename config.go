@@ -139,7 +139,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		Network:    networkValue,
 	}
 	config.GenesisBlockIdentifier = genesisBlockHash
-	config.ChainConfig = params.MainnetChainConfig
+	config.ChainConfig = chainConfig
 
 	config.GethURL = DefaultGethURL
 	envGethURL := os.Getenv(GethEnv)

@@ -3,7 +3,7 @@ module github.com/mdehoog/op-rosetta
 go 1.18
 
 require (
-	github.com/coinbase/rosetta-geth-sdk v0.0.2
+	github.com/coinbase/rosetta-geth-sdk v0.0.3
 	github.com/coinbase/rosetta-sdk-go v0.7.11
 	github.com/ethereum/go-ethereum v1.10.21
 )

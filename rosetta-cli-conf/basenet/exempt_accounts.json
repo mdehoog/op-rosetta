@@ -1,0 +1,29 @@
+[
+   {
+        "account_identifier": {
+          "address":"0x3A74482b7ABd991f26106446f8d598C6F1c18622"
+        },
+        "currency": {
+          "symbol": "ETH",
+          "decimals": 18
+        }
+    },
+    {
+      "account_identifier": {
+        "address":"0x84e1Cd1569671054000ac5F035B4fB73859FE7BE"
+      },
+      "currency": {
+        "symbol": "ETH",
+        "decimals": 18
+      }
+    },
+    {
+      "account_identifier": {
+        "address":"0x3d94899913dAd06A74f3Bd41FE682df8eAf28AE6"
+      },
+      "currency": {
+        "symbol": "ETH",
+        "decimals": 18
+      }
+    }
+]
