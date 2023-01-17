@@ -200,8 +200,9 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 			Symbol:   Symbol,
 			Decimals: Decimals,
 		},
-		TracePrefix:  "optrace",
-		FilterTokens: filterTokens,
+		TracePrefix:     "optrace",
+		FilterTokens:    filterTokens,
+		SupportsSyncing: true,
 	}
 
 	return config, nil

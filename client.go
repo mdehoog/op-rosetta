@@ -33,7 +33,7 @@ func (c *OpClient) ParseOps(
 ) ([]*types.Operation, error) {
 	var ops []*types.Operation
 
-	if tx.Receipt.Type == L1ToL2DepositType && len(tx.Trace) > 0 {
+	if tx.Receipt.Type == L1ToL2DepositType && len(tx.Trace) > 0 && tx.Transaction.IsSystemTx() {
 		trace := tx.Trace[0]
 		traceType := strings.ToUpper(trace.Type)
 		opStatus := sdkTypes.SuccessStatus
@@ -42,7 +42,10 @@ func (c *OpClient) ParseOps(
 		metadata := map[string]interface{}{}
 
 		if from != to {
-			feeOps := services.FeeOps(tx)
+			feeOps, err := FeeOps(tx)
+			if err != nil {
+				return nil, err
+			}
 			ops = append(ops, feeOps...)
 		}
 
@@ -65,9 +68,13 @@ func (c *OpClient) ParseOps(
 		return ops, nil
 	}
 
-	feeOps := services.FeeOps(tx)
+	feeOps, err := FeeOps(tx)
+	if err != nil {
+		return nil, err
+	}
 	ops = append(ops, feeOps...)
 
+	ops = append(ops, MintOps(tx, len(ops))...)
 	traceOps := services.TraceOps(tx.Trace, len(ops))
 	ops = append(ops, traceOps...)
 
@@ -108,13 +115,21 @@ func (c *OpClient) GetBlockReceipts(
 		}
 		gasUsed := new(big.Int).SetUint64(ethReceipts[i].GasUsed)
 		feeAmount := new(big.Int).Mul(gasUsed, gasPrice)
+		if ethReceipts[i].L1Fee != nil {
+			feeAmount.Add(feeAmount, ethReceipts[i].L1Fee)
+		}
 
+		receiptJSON, err := ethReceipts[i].MarshalJSON()
+		if err != nil {
+			return nil, fmt.Errorf("unable to marshal receipt for %x: %v", txs[i].Tx.Hash().Hex(), err)
+		}
 		receipt := &evmClient.RosettaTxReceipt{
-			Type: ethReceipts[i].Type,
-			GasPrice:       gasPrice,
-			GasUsed:        gasUsed,
-			Logs:           ethReceipts[i].Logs,
-			RawMessage:     nil,
+			Type:     ethReceipts[i].Type,
+			GasPrice: gasPrice,
+			GasUsed:  gasUsed,
+			Logs:     ethReceipts[i].Logs,
+			// This is a hack to get around the fact that the RosettaTxReceipt doesn't contain L1 fees. We add the raw receipt here so we can access other rollup fields later
+			RawMessage:     receiptJSON,
 			TransactionFee: feeAmount,
 		}
 
@@ -154,6 +169,9 @@ func (c *OpClient) GetTransactionReceipt(
 	}
 	gasUsed := new(big.Int).SetUint64(r.GasUsed)
 	feeAmount := new(big.Int).Mul(gasUsed, gasPrice)
+	if r.L1Fee != nil {
+		feeAmount.Add(feeAmount, r.L1Fee)
+	}
 
 	return &evmClient.RosettaTxReceipt{
 		GasPrice:       gasPrice,
