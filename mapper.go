@@ -16,6 +16,7 @@ var (
 	l1FeeVault   = common.HexToAddress("0x420000000000000000000000000000000000001a")
 
 	MintOpType = "MINT"
+	BurnOpType = "BURN"
 )
 
 // FeeOps returns the fee operations for a given transaction
@@ -130,6 +131,26 @@ func MintOps(tx *evmClient.LoadedTransaction, startIndex int) []*RosettaTypes.Op
 				Address: tx.From.String(),
 			},
 			Amount: evmClient.Amount(tx.Transaction.Mint(), sdkTypes.Currency),
+		},
+	}
+}
+
+// FIXME: this is wrong
+func BurnOps(tx *evmClient.LoadedTransaction, startIndex int) []*RosettaTypes.Operation {
+	if *tx.Transaction.To() != common.HexToAddress("0xdeaddeaddeaddeaddeaddeaddeaddeaddeaddead") {
+		return nil
+	}
+	return []*RosettaTypes.Operation{
+		{
+			OperationIdentifier: &RosettaTypes.OperationIdentifier{
+				Index: int64(startIndex),
+			},
+			Type:   BurnOpType,
+			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
+			Account: &RosettaTypes.AccountIdentifier{
+				Address: tx.From.String(),
+			},
+			Amount: evmClient.Amount(tx.Transaction.Value(), sdkTypes.Currency),
 		},
 	}
 }

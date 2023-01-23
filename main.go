@@ -23,7 +23,7 @@ func main() {
 		ots = append(ots, ot)
 	}
 	ots = append(ots, MintOpType)
-	// TODO(inphi): add BurnOpType
+	ots = append(ots, BurnOpType)
 	t.OperationTypes = ots
 
 	client, err := NewOpClient(cfg)
