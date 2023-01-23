@@ -14,17 +14,11 @@ func main() {
 	}
 
 	t := types.LoadTypes()
-	var ots []string
-	for _, ot := range t.OperationTypes {
-		if ot == types.MinerRewardOpType || ot == types.UncleRewardOpType {
-			// Optimism does not have miner or uncle reward type ops
-			continue
-		}
-		ots = append(ots, ot)
-	}
-	ots = append(ots, MintOpType)
+	t.OperationTypes = append(types.OperationTypes, types.InvalidOpType)
+	// Optimism does not have miner or uncle reward type ops
 	// TODO(inphi): add BurnOpType
-	t.OperationTypes = ots
+	t.OperationTypes = t.OperationTypes[2:]
+	t.OperationTypes = append(types.OperationTypes, types.InvalidOpType, MintOpType)
 
 	client, err := NewOpClient(cfg)
 	if err != nil {

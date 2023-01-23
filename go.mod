@@ -3,8 +3,8 @@ module github.com/mdehoog/op-rosetta
 go 1.18
 
 require (
-	github.com/coinbase/rosetta-geth-sdk v0.0.4
-	github.com/coinbase/rosetta-sdk-go v0.7.11
+	github.com/coinbase/rosetta-geth-sdk v0.0.5-0.20230124171712-bed30e6be8c7
+	github.com/coinbase/rosetta-sdk-go v0.8.2
 	github.com/ethereum/go-ethereum v1.10.26
 )
 
@@ -48,8 +48,8 @@ require (
 	github.com/tklauser/go-sysconf v0.3.5 // indirect
 	github.com/tklauser/numcpus v0.2.2 // indirect
 	github.com/tyler-smith/go-bip39 v1.0.2 // indirect
-	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e // indirect
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
+	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
+	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f // indirect
 	golang.org/x/sys v0.0.0-20221013171732-95e765b1cc43 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect

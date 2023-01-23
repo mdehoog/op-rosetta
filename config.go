@@ -179,6 +179,10 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 	}
 
 	tokenListJson := os.Getenv(TokenListEnv)
+	// if users do not provide tokens, read from the internal files
+	if tokenListJson == "" {
+		tokenListJson = "tokenList.json"
+	}
 	if file, err := os.ReadFile(tokenListJson); err == nil {
 		// if the envvar points to a file, read it; otherwise the envvar contents is expected to be JSON
 		tokenListJson = string(file)
@@ -202,6 +206,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		},
 		TracePrefix:     "optrace",
 		FilterTokens:    filterTokens,
+		TokenWhiteList:  payload,
 		SupportsSyncing: true,
 	}
 
