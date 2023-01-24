@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"context"
@@ -16,7 +16,6 @@ import (
 	evmClient "github.com/coinbase/rosetta-geth-sdk/client"
 	"github.com/coinbase/rosetta-geth-sdk/services"
 	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
-	"github.com/coinbase/rosetta-sdk-go/types"
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
 	EthTypes "github.com/ethereum/go-ethereum/core/types"
 )
@@ -31,8 +30,8 @@ const (
 
 func (c *OpClient) ParseOps(
 	tx *evmClient.LoadedTransaction,
-) ([]*types.Operation, error) {
-	var ops []*types.Operation
+) ([]*RosettaTypes.Operation, error) {
+	var ops []*RosettaTypes.Operation
 
 	if tx.Receipt.Type == L1ToL2DepositType && len(tx.Trace) > 0 && tx.Transaction.IsSystemTx() {
 		trace := tx.Trace[0]
