@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/coinbase/rosetta-geth-sdk/configuration"
+	"github.com/mdehoog/op-rosetta/handlers"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
@@ -42,7 +43,7 @@ func (c *OpClient) ParseOps(
 		metadata := map[string]interface{}{}
 
 		if from != to {
-			feeOps, err := FeeOps(tx)
+			feeOps, err := handlers.FeeOps(tx)
 			if err != nil {
 				return nil, err
 			}
@@ -68,14 +69,14 @@ func (c *OpClient) ParseOps(
 		return ops, nil
 	}
 
-	feeOps, err := FeeOps(tx)
+	feeOps, err := handlers.FeeOps(tx)
 	if err != nil {
 		return nil, err
 	}
 	ops = append(ops, feeOps...)
 
-	ops = append(ops, MintOps(tx, len(ops))...)
-	ops = append(ops, BurnOps(tx, len(ops))...)
+	ops = append(ops, handlers.MintOps(tx, len(ops))...)
+	ops = append(ops, handlers.BurnOps(tx, len(ops))...)
 	traceOps := services.TraceOps(tx.Trace, len(ops))
 	ops = append(ops, traceOps...)
 

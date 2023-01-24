@@ -5,6 +5,7 @@ import (
 
 	"github.com/coinbase/rosetta-geth-sdk/types"
 	"github.com/coinbase/rosetta-geth-sdk/utils"
+	"github.com/mdehoog/op-rosetta/handlers"
 )
 
 func main() {
@@ -22,8 +23,8 @@ func main() {
 		}
 		ots = append(ots, ot)
 	}
-	ots = append(ots, MintOpType)
-	ots = append(ots, BurnOpType)
+	ots = append(ots, handlers.MintOpType)
+	ots = append(ots, handlers.BurnOpType)
 	t.OperationTypes = ots
 
 	client, err := NewOpClient(cfg)
