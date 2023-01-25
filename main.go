@@ -22,6 +22,7 @@ func main() {
 		}
 		ots = append(ots, ot)
 	}
+	ots = append(ots, types.InvalidOpType)
 	ots = append(ots, MintOpType)
 	// TODO(inphi): add BurnOpType
 	t.OperationTypes = ots

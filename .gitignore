@@ -2,3 +2,4 @@
 /bin/
 /cli-data/*
 rosetta-cli-conf/*
+.vscode/

@@ -202,6 +202,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		},
 		TracePrefix:     "optrace",
 		FilterTokens:    filterTokens,
+		TokenWhiteList:  payload,
 		SupportsSyncing: true,
 	}
 
