@@ -2,3 +2,7 @@
 /bin/
 /cli-data/*
 rosetta-cli-conf/*
+
+
+# Environment Variables
+.env

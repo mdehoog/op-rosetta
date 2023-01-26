@@ -16,19 +16,19 @@ To learn more about the Rosetta API, you can find more online at [rosetta-api.or
 
 ### Running
 
+To run the `op-rosetta` client, you can use the following command:
+
 ```
 make build
 export CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'
-MODE=ONLINE PORT=5000 NETWORK=mainnet GETH=https://mainnet.optimism.io bin/op-rosetta
+MODE=ONLINE PORT=8080 NETWORK=mainnet GETH=https://mainnet.optimism.io bin/op-rosetta
 ```
 
 ### Testing with `rosetta-cli`
 
-To validate `rosetta-ethereum`, [install `rosetta-cli`](https://github.com/coinbase/rosetta-cli#install)
-and run one of the following commands:
-* `rosetta-cli check:data --configuration-file rosetta-cli-conf/testnet/config.json` - This command validates that the Data API implementation is correct using the ethereum `testnet` node. It also ensures that the implementation does not miss any balance-changing operations.
-* `rosetta-cli check:construction --configuration-file rosetta-cli-conf/testnet/config.json` - This command validates the Construction API implementation. It also verifies transaction construction, signing, and submissions to the `testnet` network.
-* `rosetta-cli check:data --configuration-file rosetta-cli-conf/mainnet/config.json` - This command validates that the Data API implementation is correct using the ethereum `mainnet` node. It also ensures that the implementation does not miss any balance-changing operations.
+_NOTE: `op-rosetta` must be running on the specified host and port provided in the configuration file. For local testing, this can be done as described in the [Running](#running) section, which will run an instance on localhost, port 8080._
+
+See [configs/README.md](./configs/README.md) for more information.
 
 ### License
 
