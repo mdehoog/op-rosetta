@@ -1,0 +1,27 @@
+name: CI
+
+on: [push]
+
+env:
+  go_version: 1.16
+  GO111MODULE: on
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.go_version }}
+      - uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --timeout 3m
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          version: latest
+      - run: make format
