@@ -1,4 +1,4 @@
-name: CI
+name: tests
 
 on: [push]
 
@@ -14,7 +14,4 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: ${{ env.go_version }}
-      - name: Run Check:data test
-        run: .github/scripts/cli.sh
-        shell: bash
-      - run: make test
+      - run: .github/scripts/cli.sh && make test
