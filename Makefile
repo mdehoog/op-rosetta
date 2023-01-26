@@ -1,5 +1,4 @@
 # Load in the .env file
-# include .env
 ifneq ("$(wildcard $(.env))","")
     include .env
 endif
@@ -32,8 +31,13 @@ all: clean format build test lint
 clean:
 	rm -rf bin/op-rosetta
 
+# Formatting with gofmt
 format:
 	gofmt -s -w -l .
+
+# Run the golangci-lint linter
+lint:
+	golangci-lint run -E asciicheck,goimports,misspell ./...
 
 # Build the `op-rosetta` binary
 build:
@@ -47,13 +51,12 @@ unit-tests:
 integration-tests: config-validation
 config-validation: run-optimism-mainnet-validate-config run-optimism-goerli-validate-config
 
+# TODO: Add the `check:construction` command to the pipeline
+check-construction: run-optimism-mainnet-construction-check run-optimism-goerli-construction-check
+
 # TODO: Add the `check:data` command to the pipeline
 # TODO: Requires node env var configuration in the github repository for the actions to run tests successfully
 check-data: run-optimism-mainnet-data-check run-optimism-goerli-data-check
-
-# Run the golangci-lint linter
-lint:
-	golangci-lint run -E asciicheck,goimports,misspell ./...
 
 
 ##################################################################################
@@ -67,6 +70,10 @@ run-optimism-goerli-validate-config:
 # Runs the rosetta-cli check:data command with the optimism goerli configuration
 run-optimism-goerli-data-check:
 	ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli.json rosetta-cli check:data configs/optimism/goerli.json
+
+# Runs the rosetta-cli check:construction command with the optimism goerli configuration
+run-optimism-goerli-construction-check:
+	ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli.json rosetta-cli check:construction configs/optimism/goerli.json
 
 # Runs an instance of `op-rosetta` configured for Optimism Goerli
 # For the genesis block hash, see:
@@ -95,6 +102,9 @@ run-optimism-mainnet-validate-config:
 run-optimism-mainnet-data-check:
 	ROSETTA_CONFIGURATION_FILE=configs/optimism/mainnet.json rosetta-cli check:data configs/optimism/mainnet.json
 
+# Runs the rosetta-cli check:construction command with the optimism mainnet configuration
+run-optimism-mainnet-construction-check:
+	ROSETTA_CONFIGURATION_FILE=configs/optimism/mainnet.json rosetta-cli check:construction configs/optimism/mainnet.json
 
 # TODO: Set the GENESIS_BLOCK_HASH value for this command
 # Runs an instance of `op-rosetta` configured for Optimism Mainnet

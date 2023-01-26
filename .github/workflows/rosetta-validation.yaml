@@ -12,7 +12,6 @@ jobs:
     timeout-minutes: 20
     steps:
     - uses: actions/checkout@v3
-
     - name: Start a private ethereum network
       uses: ./.github/actions/geth
       id: geth
