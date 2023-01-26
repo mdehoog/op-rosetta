@@ -1,5 +1,8 @@
 # Load in the .env file
-include .env
+# include .env
+ifneq ("$(wildcard $(.env))","")
+    include .env
+endif
 
 # General Config
 PWD=$(shell pwd)
