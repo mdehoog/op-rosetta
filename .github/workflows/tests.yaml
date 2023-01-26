@@ -14,5 +14,7 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: ${{ env.go_version }}
-      - run: touch .env
+      - name: Run Check:data test
+        run: .github/scripts/cli.sh
+        shell: bash
       - run: make test
