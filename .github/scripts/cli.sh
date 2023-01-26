@@ -6,7 +6,7 @@ curl -sSfL https://raw.githubusercontent.com/coinbase/rosetta-cli/master/scripts
 echo "rosetta-cli downloaded"
 
 echo "Copying rosetta-cli to root..."
-cp ./bin/rosetta-cli ./
+mv ./bin/rosetta-cli ./
 echo "Rosetta cli location: $(which rosetta-cli)"
 
 # echo "start check:data"
