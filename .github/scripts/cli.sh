@@ -4,11 +4,12 @@
 echo "Downloading rosetta-cli..."
 curl -sSfL https://raw.githubusercontent.com/coinbase/rosetta-cli/master/scripts/install.sh | sh -s
 echo "rosetta-cli downloaded"
-./bin/rosetta-cli --version
+./bin/rosetta-cli version
 
 echo "Copying rosetta-cli to root..."
 mv ./bin/rosetta-cli ./
-ls -la
+chmod +x ./rosetta-cli
+rosetta-cli version
 echo "Rosetta cli location: $(which rosetta-cli)"
 
 # echo "start check:data"
