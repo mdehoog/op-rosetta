@@ -6,3 +6,4 @@ rosetta-cli-conf/*
 
 # Environment Variables
 .env
+.vscode/
