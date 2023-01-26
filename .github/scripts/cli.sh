@@ -9,6 +9,7 @@ echo "rosetta-cli downloaded"
 echo "Copying rosetta-cli to root..."
 mv ./bin/rosetta-cli ./
 chmod +x ./rosetta-cli
+source ./
 rosetta-cli version
 echo "Rosetta cli location: $(which rosetta-cli)"
 
