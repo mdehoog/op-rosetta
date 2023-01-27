@@ -1,4 +1,4 @@
-name: tests
+name: unit tests
 
 on: [push]
 
@@ -14,7 +14,5 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: ${{ env.go_version }}
-      - name: Install rosetta-cli
-        run: .github/scripts/cli.sh
-      - name: Run Tests
-        run: make test
+      - name: run unit tests
+        run: make unit-tests
