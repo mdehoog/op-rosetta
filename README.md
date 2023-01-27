@@ -1,28 +1,27 @@
-<div align="center">
-  <br />
-  <br />
-  <a href="https://www.rosetta-api.org"><img alt="Rosetta" src="https://www.rosetta-api.org/img/rosetta_header.png" width=600 height=100></a>
-  <br />
-  <h3><a href="https://github.com/mdehoog/op-rosetta">op-rosetta</a> is a Rosetta-compatible API for Optimism Bedrock, a low-cost and lightning-fast Ethereum L2 blockchain. It is built on <a href="https://github.com/coinbase/rosetta-geth-sdk">coinbase/rosetta-geth-sdk</a>.</h3>
-  <br />
-</div>
+<img align="right" width="150" height="150" top="100" src="./assets/optimism.png">
+
+# op-rosetta • [![tests](https://github.com/mdehoog/op-rosetta/actions/workflows/unit-tests.yaml/badge.svg?label=tests)](https://github.com/mdehoog/op-rosetta/actions/workflows/unit-tests.yaml) [![lints](https://github.com/mdehoog/op-rosetta/actions/workflows/lints.yaml/badge.svg)](https://github.com/mdehoog/op-rosetta/actions/workflows/lints.yaml) 
+
+> **Warning**
+> WIP; Not bedrock-compatible yet.
+
+Provides Rosetta API compatibility for Optimism Bedrock, a low-cost and lightning-fast Ethereum L2 blockchain.
 
 ## Overview
 
-`op-rosetta` provides an executable [client](./app/client.go) that plugs into the [rosetta-geth-sdk](https://github.com/coinbase/rosetta-geth-sdk). This provides Rosetta API compatibility for Optimism Bedrock, a low-cost and lightning-fast Ethereum L2 blockchain.
+`op-rosetta` is an executable [client](./app/client.go) extending the [rosetta-geth-sdk](https://github.com/coinbase/rosetta-geth-sdk).
 
 To learn more about the Rosetta API, you can find more online at [rosetta-api.org](https://www.rosetta-api.org/).
 
-
 ### Running
 
-To run the `op-rosetta` client, you can use the following command:
+Run the `op-rosetta` client for goerli like so: `make run-optimism-goerli`.
 
-```
-make build
-export CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'
-MODE=ONLINE PORT=8080 NETWORK=mainnet GETH=https://mainnet.optimism.io bin/op-rosetta
-```
+A mainnet client can be run with `make run-optimism-mainnet`.
+
+> **Note**
+> Mainnet will only be supported once Optimism mainnet is upgraded to its Bedrock Release.
+
 
 ### Testing with `rosetta-cli`
 
