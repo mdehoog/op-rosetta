@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"encoding/json"
@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/ethereum/go-ethereum/params"
 
 	"github.com/coinbase/rosetta-geth-sdk/configuration"
@@ -134,7 +133,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		return nil, fmt.Errorf("unable to parse chain config: %w", err)
 	}
 
-	config.Network = &types.NetworkIdentifier{
+	config.Network = &RosettaTypes.NetworkIdentifier{
 		Blockchain: blockchain,
 		Network:    networkValue,
 	}

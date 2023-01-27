@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/coinbase/rosetta-geth-sdk/configuration"
+	"github.com/mdehoog/op-rosetta/handlers"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
@@ -15,7 +16,6 @@ import (
 	evmClient "github.com/coinbase/rosetta-geth-sdk/client"
 	"github.com/coinbase/rosetta-geth-sdk/services"
 	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
-	"github.com/coinbase/rosetta-sdk-go/types"
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
 	EthTypes "github.com/ethereum/go-ethereum/core/types"
 )
@@ -30,8 +30,8 @@ const (
 
 func (c *OpClient) ParseOps(
 	tx *evmClient.LoadedTransaction,
-) ([]*types.Operation, error) {
-	var ops []*types.Operation
+) ([]*RosettaTypes.Operation, error) {
+	var ops []*RosettaTypes.Operation
 
 	if tx.Receipt.Type == L1ToL2DepositType && len(tx.Trace) > 0 && tx.Transaction.IsSystemTx() {
 		trace := tx.Trace[0]
@@ -42,7 +42,7 @@ func (c *OpClient) ParseOps(
 		metadata := map[string]interface{}{}
 
 		if from != to {
-			feeOps, err := FeeOps(tx)
+			feeOps, err := handlers.FeeOps(tx)
 			if err != nil {
 				return nil, err
 			}
@@ -68,13 +68,14 @@ func (c *OpClient) ParseOps(
 		return ops, nil
 	}
 
-	feeOps, err := FeeOps(tx)
+	feeOps, err := handlers.FeeOps(tx)
 	if err != nil {
 		return nil, err
 	}
 	ops = append(ops, feeOps...)
 
-	ops = append(ops, MintOps(tx, len(ops))...)
+	ops = append(ops, handlers.MintOps(tx, len(ops))...)
+	// ops = append(ops, handlers.BurnOps(tx, len(ops))...)
 	traceOps := services.TraceOps(tx.Trace, len(ops))
 	ops = append(ops, traceOps...)
 

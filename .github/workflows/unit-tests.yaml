@@ -1,0 +1,18 @@
+name: unit tests
+
+on: [push]
+
+env:
+  go_version: 1.19
+  GO111MODULE: on
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.go_version }}
+      - name: run unit tests
+        run: make unit-tests
