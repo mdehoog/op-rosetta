@@ -1,6 +1,6 @@
-<img align="right" width="150" height="150" top="100" src="./assets/optimism.png">
+<img align="right" width="150" height="150" top="100" src="./assets/rosetta.png">
 
-# op-rosetta • [![tests](https://github.com/mdehoog/op-rosetta/actions/workflows/unit-tests.yaml/badge.svg?label=tests)](https://github.com/mdehoog/op-rosetta/actions/workflows/unit-tests.yaml) [![lints](https://github.com/mdehoog/op-rosetta/actions/workflows/lints.yaml/badge.svg)](https://github.com/mdehoog/op-rosetta/actions/workflows/lints.yaml) 
+# op-rosetta • [![tests](https://github.com/mdehoog/op-rosetta/actions/workflows/unit-tests.yaml/badge.svg?label=tests)](https://github.com/mdehoog/op-rosetta/actions/workflows/unit-tests.yaml) [![lints](https://github.com/mdehoog/op-rosetta/actions/workflows/lints.yaml/badge.svg)](https://github.com/mdehoog/op-rosetta/actions/workflows/lints.yaml)
 
 > **Warning**
 > WIP; Not bedrock-compatible yet.

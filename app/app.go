@@ -31,7 +31,7 @@ func Main(version string) func(cliCtx *cli.Context) error {
 			ots = append(ots, ot)
 		}
 		ots = append(ots, handlers.MintOpType)
-		ots = append(ots, handlers.BurnOpType)
+		// ots = append(ots, handlers.BurnOpType)
 		t.OperationTypes = ots
 
 		client, err := NewOpClient(cfg)
