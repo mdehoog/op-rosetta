@@ -1,4 +1,4 @@
-package utils
+package logging
 
 import (
 	"os"
@@ -6,8 +6,8 @@ import (
 	"github.com/ethereum/go-ethereum/log"
 )
 
-// SetupDefaults sets up the default logging level.
-func SetupDefaults() {
+// SetupLogging sets up the default logging level.
+func SetupLogging() {
 	log.Root().SetHandler(
 		log.LvlFilterHandler(
 			log.LvlInfo,

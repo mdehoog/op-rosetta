@@ -13,6 +13,25 @@ Provides Rosetta API compatibility for Optimism Bedrock, a low-cost and lightnin
 
 To learn more about the Rosetta API, you can find more online at [rosetta-api.org](https://www.rosetta-api.org/).
 
+## Project Structure
+
+```
+├── assets
+│   └── rosetta.png
+├── cmd
+│   └── main.go -> The `op-rosetta` executable entrypoint
+├── configs
+│   ├── optimism/ -> Optimism Mainnet and Goerli config files
+│   └── README.md
+└── pkg
+    ├── client/ -> Optimism Rosetta API client
+    ├── config/ -> Configuration options
+    ├── handlers/ -> Rosetta API handlers
+    ├── logging/ -> Logging utilities
+    ├── topics/ -> Events topic functionality
+    └── utils/ -> Package utilities
+```
+
 ### Running
 
 Run the `op-rosetta` client for goerli like so: `make run-optimism-goerli`.

@@ -1,4 +1,4 @@
-package app
+package client
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/coinbase/rosetta-geth-sdk/configuration"
-	"github.com/mdehoog/op-rosetta/handlers"
+	"github.com/mdehoog/op-rosetta/pkg/handlers"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
@@ -23,10 +23,6 @@ import (
 type OpClient struct {
 	*evmClient.SDKClient
 }
-
-const (
-	L1ToL2DepositType = 126
-)
 
 func (c *OpClient) ParseOps(
 	tx *evmClient.LoadedTransaction,

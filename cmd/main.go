@@ -2,24 +2,25 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
-	"github.com/mdehoog/op-rosetta/app"
-	"github.com/mdehoog/op-rosetta/utils"
-	"github.com/urfave/cli"
+	"github.com/mdehoog/op-rosetta/pkg/logging"
+	"github.com/mdehoog/op-rosetta/pkg/utils"
 
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/urfave/cli"
 )
 
 var (
-	Version   = "v0.1.0"
+	Version   = "v1.0.0"
 	GitCommit = ""
 	GitDate   = ""
 )
 
 func main() {
-	utils.SetupDefaults()
+	logging.SetupLogging()
 
+	// Setup App Metadata
 	cliApp := cli.NewApp()
 	cliApp.Flags = []cli.Flag{}
 	cliApp.Version = fmt.Sprintf("%s-%s-%s", Version, GitCommit, GitDate)
@@ -27,9 +28,12 @@ func main() {
 	cliApp.Usage = "Optimism Rosetta Service"
 	cliApp.Description = "Service for translating Optimism transactions into Rosetta Operations"
 
-	cliApp.Action = app.Main(Version)
+	// The main action of the app
+	cliApp.Action = utils.Bootstrap()
+
+	// Run op-rosetta
 	err := cliApp.Run(os.Args)
 	if err != nil {
-		log.Crit("op-rosetta failed", "message", err)
+		log.Fatalf("op-rosetta failed: %v", err)
 	}
 }

@@ -1,4 +1,4 @@
-package app
+package client
 
 import (
 	"encoding/json"
@@ -88,8 +88,8 @@ const (
 	GenesisBlockIndex = int64(0)
 )
 
-// LoadConfiguration attempts to create a new Configuration
-// using the ENVs in the environment.
+// LoadConfiguration attempts to create a new [configuration.Configuration]
+// using environment variables.
 func LoadConfiguration() (*configuration.Configuration, error) {
 	config := &configuration.Configuration{}
 

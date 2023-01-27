@@ -7,7 +7,7 @@
   "online_url": "http://localhost:8080",
   "data_directory": "",
   "http_timeout": 300,
-  "max_retries": 15,
+  "max_retries": 100,
   "max_online_connections": 500,
   "force_retry": true,
   "max_sync_concurrency": 64,
@@ -21,12 +21,16 @@
   "value_log_file_size": 1024,
   "construction": null,
   "data": {
+    "start_index": 4307133,
     "reconciliation_disabled": true,
     "inactive_discrepancy_search_disabled": true,
     "balance_tracking_disabled": true,
     "initial_balance_fetch_disabled":true,
     "active_reconciliation_concurrency": 32,
     "bootstrap_balances": "",
+    "log_balance_changes": true,
+    "log_transactions": true,
+    "log_blocks": true,
     "end_conditions": {
       "tip": true
     }

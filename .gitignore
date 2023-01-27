@@ -1,9 +1,24 @@
-/.idea/
-/bin/
-/cli-data/*
-rosetta-cli-conf/*
-
-
-# Environment Variables
-.env
+# Editor configuration
 .vscode/
+
+# Environment variables
+.env
+.env.prod
+
+# Apple weirdness
+.DS_Store
+
+# Golang output
+*.test
+*.out
+.idea
+*.iml
+out
+gen
+bin
+tmp
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
