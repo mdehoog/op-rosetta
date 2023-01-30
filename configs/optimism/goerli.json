@@ -27,6 +27,7 @@
     "balance_tracking_disabled": false,
     "initial_balance_fetch_disabled": false,
     "active_reconciliation_concurrency": 32,
+    "historical_balance_disabled": false,
     "bootstrap_balances": "",
     "log_balance_changes": true,
     "log_transactions": true,
