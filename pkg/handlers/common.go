@@ -10,6 +10,9 @@ const (
 	MintOpType = "MINT"
 	// BurnOpType is a [RosettaTypes.Operation] type for an Optimism Withdrawal or "burn" transaction.
 	BurnOpType = "BURN"
+
+	// An erroneous STOP Type not defined in rosetta-geth-sdk
+	StopOpType = "STOP"
 )
 
 // Optimism Predeploy Addresses

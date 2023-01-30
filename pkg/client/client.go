@@ -20,6 +20,7 @@ import (
 	EthTypes "github.com/ethereum/go-ethereum/core/types"
 )
 
+// OpClient wraps the [evmClient.SDKClient] to add Optimism-specific functionality.
 type OpClient struct {
 	*evmClient.SDKClient
 }
@@ -98,9 +99,20 @@ func (c *OpClient) GetBlockReceipts(
 			Result: &ethReceipts[i],
 		}
 	}
-	if err := c.BatchCallContext(ctx, reqs); err != nil {
-		return nil, err
+
+	maxBatchSize := 25
+	for i := 0; i < len(txs); i += maxBatchSize {
+		if i+maxBatchSize < len(txs) {
+			if err := c.BatchCallContext(ctx, reqs[i:i+maxBatchSize]); err != nil {
+				return nil, err
+			}
+		} else {
+			if err := c.BatchCallContext(ctx, reqs[i:]); err != nil {
+				return nil, err
+			}
+		}
 	}
+
 	for i := range reqs {
 		if reqs[i].Error != nil {
 			return nil, reqs[i].Error

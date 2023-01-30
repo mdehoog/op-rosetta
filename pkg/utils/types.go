@@ -18,6 +18,8 @@ func LoadTypes() *sdkTypes.Types {
 		ots = append(ots, ot)
 	}
 	ots = append(ots, handlers.MintOpType)
+	// ots = append(ots, handlers.BurnOpType)
+	ots = append(ots, handlers.StopOpType)
 	t.OperationTypes = ots
 
 	return t
