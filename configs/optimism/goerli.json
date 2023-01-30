@@ -23,7 +23,7 @@
   "data": {
     "start_index": 4307133,
     "reconciliation_disabled": false,
-    "inactive_discrepancy_search_disabled": false,
+    "inactive_discrepancy_search_disabled": true,
     "balance_tracking_disabled": false,
     "initial_balance_fetch_disabled": false,
     "active_reconciliation_concurrency": 32,

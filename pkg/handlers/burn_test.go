@@ -9,6 +9,7 @@ import (
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
 	gethCommon "github.com/ethereum/go-ethereum/common"
 	EthTypes "github.com/ethereum/go-ethereum/core/types"
+	common "github.com/mdehoog/op-rosetta/pkg/common"
 	handlers "github.com/mdehoog/op-rosetta/pkg/handlers"
 	suite "github.com/stretchr/testify/suite"
 )
@@ -56,7 +57,7 @@ func (testSuite *BurnTestSuite) TestValidBurn() {
 	index := 1
 	myTx := EthTypes.NewTransaction(
 		0,
-		handlers.L2ToL1MessagePasser,
+		common.L2ToL1MessagePasser,
 		amount,
 		0,
 		gasPrice,
@@ -76,7 +77,7 @@ func (testSuite *BurnTestSuite) TestValidBurn() {
 			OperationIdentifier: &RosettaTypes.OperationIdentifier{
 				Index: int64(index),
 			},
-			Type:   handlers.BurnOpType,
+			Type:   common.BurnOpType,
 			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
 			Account: &RosettaTypes.AccountIdentifier{
 				Address: from.String(),

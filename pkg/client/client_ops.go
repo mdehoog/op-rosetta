@@ -3,12 +3,11 @@ package client
 import (
 	"strings"
 
-	"github.com/mdehoog/op-rosetta/pkg/handlers"
-
 	evmClient "github.com/coinbase/rosetta-geth-sdk/client"
 	"github.com/coinbase/rosetta-geth-sdk/services"
 	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
+	"github.com/mdehoog/op-rosetta/pkg/handlers"
 )
 
 // ParseOps must be implemented by downstream clients from the [evmClient.SDKClient].
