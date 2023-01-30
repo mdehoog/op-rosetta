@@ -13,18 +13,18 @@ import (
 	suite "github.com/stretchr/testify/suite"
 )
 
-type BurnTestSuite struct {
+type MintTestSuite struct {
 	suite.Suite
 }
 
-// TestBurn runs the BurnTestSuite.
-func TestBurn(t *testing.T) {
-	suite.Run(t, new(BurnTestSuite))
+// TestMint runs the MintTestSuite.
+func TestMint(t *testing.T) {
+	suite.Run(t, new(MintTestSuite))
 }
 
-// TestInvalidDestination tests that a [evmClient.LoadedTransaction] with an invalid destination is not a burn.
-func (testSuite *BurnTestSuite) TestInvalidDestination() {
-	// Construct a loaded transaction with an invalid burn destination (not L2ToL1MessagePasser).
+// TestInvalidDeposit tests that a non-deposit [evmClient.LoadedTransaction] is not handled by MintOps.
+func (testSuite *MintTestSuite) TestInvalidDeposit() {
+	// Construct a random transaction (non-DepositTx)
 	h := gethCommon.HexToHash("0xb358c6958b1cab722752939cbb92e3fec6b6023de360305910ce80c56c3dad9d")
 	gasPrice := big.NewInt(10000)
 	myTx := EthTypes.NewTransaction(
@@ -40,43 +40,44 @@ func (testSuite *BurnTestSuite) TestInvalidDestination() {
 		Transaction: myTx,
 	}
 
-	// BurnOps should return nil for a transaction with an invalid destination.
-	ops := handlers.BurnOps(loadedTxn, 0)
+	// MintOps should return nil for non-min transactions.
+	ops := handlers.MintOps(loadedTxn, 0)
 	testSuite.Nil(ops)
 }
 
-// TestValidBurn tests that [handlers.BurnOps] correctly constructs [RosettaTypes.Operation],
-// given a [evmClient.LoadedTransaction] with the correct destination address.
-func (testSuite *BurnTestSuite) TestValidBurn() {
-	// Construct a loaded transaction with the correct burn destination (L2ToL1MessagePasser).
+// TestValidMint tests that [handlers.MintOps] correctly constructs [RosettaTypes.Operation],
+// given a [evmClient.LoadedTransaction] with a Mint transaction.
+func (testSuite *MintTestSuite) TestValidMint() {
+	// Construct a loaded mint transaction.
 	// Note: this hash is incorrect and was hijacked from the above transaction.
 	h := gethCommon.HexToHash("0xb358c6958b1cab722752939cbb92e3fec6b6023de360305910ce80c56c3dad9d")
 	gasPrice := big.NewInt(10000)
 	amount := big.NewInt(100)
 	index := 1
-	myTx := EthTypes.NewTransaction(
-		0,
-		handlers.L2ToL1MessagePasser,
-		amount,
-		0,
-		gasPrice,
-		nil,
-	)
+	to := gethCommon.HexToAddress("095e7baea6a6c7c4c2dfeb977efac326af552d87")
+	myTx := EthTypes.DepositTx{
+		From:                gethCommon.HexToAddress("095e7baea6a6c7c4c2dfeb977efac326af552d87"),
+		Value:               amount,
+		To:                  &to,
+		Mint:                amount,
+		Gas:                 gasPrice.Uint64(),
+		IsSystemTransaction: false,
+	}
 	from := gethCommon.HexToAddress("095e7baea6a6c7c4c2dfeb977efac326af552d87")
 	loadedTxn := &evmClient.LoadedTransaction{
 		From:        &from,
 		TxHash:      &h,
-		Transaction: myTx,
+		Transaction: EthTypes.NewTx(&myTx),
 	}
 
-	// BurnOps should successfully construct a BurnOp for a transaction with the correct destination.
-	ops := handlers.BurnOps(loadedTxn, index)
+	// MintOps should successfully construct a Mint operation.
+	ops := handlers.MintOps(loadedTxn, index)
 	testSuite.Equal(ops, []*RosettaTypes.Operation{
 		{
 			OperationIdentifier: &RosettaTypes.OperationIdentifier{
 				Index: int64(index),
 			},
-			Type:   handlers.BurnOpType,
+			Type:   handlers.MintOpType,
 			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
 			Account: &RosettaTypes.AccountIdentifier{
 				Address: from.String(),
