@@ -1,13 +1,14 @@
+// Package handlers handles translating transactions into [RosettaTypes.Operation]s.
 package handlers
 
 import (
 	"math/big"
 
 	evmClient "github.com/coinbase/rosetta-geth-sdk/client"
+	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
 	EthTypes "github.com/ethereum/go-ethereum/core/types"
-
-	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
+	common "github.com/mdehoog/op-rosetta/pkg/common"
 )
 
 // FeeOps returns the fee operations for a given transaction.
@@ -80,7 +81,7 @@ func FeeOps(tx *evmClient.LoadedTransaction) ([]*RosettaTypes.Operation, error) 
 			Type:   sdkTypes.FeeOpType,
 			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
 			Account: &RosettaTypes.AccountIdentifier{
-				Address: BaseFeeVault.Hex(),
+				Address: common.BaseFeeVault.Hex(),
 			},
 			// Note: The basefee is not actually burned on L2
 			Amount: evmClient.Amount(tx.FeeBurned, sdkTypes.Currency),
@@ -98,7 +99,7 @@ func FeeOps(tx *evmClient.LoadedTransaction) ([]*RosettaTypes.Operation, error) 
 			Type:   sdkTypes.FeeOpType,
 			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
 			Account: &RosettaTypes.AccountIdentifier{
-				Address: L1FeeVault.Hex(),
+				Address: common.L1FeeVault.Hex(),
 			},
 			Amount: evmClient.Amount(receipt.L1Fee, sdkTypes.Currency),
 		},

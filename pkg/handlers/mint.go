@@ -4,7 +4,8 @@ import (
 	evmClient "github.com/coinbase/rosetta-geth-sdk/client"
 	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
-	"github.com/ethereum/go-ethereum/log"
+	log "github.com/ethereum/go-ethereum/log"
+	common "github.com/mdehoog/op-rosetta/pkg/common"
 )
 
 // MintOps constructs a list of [RosettaTypes.Operation]s for an Optimism Deposit or "mint" transaction.
@@ -18,7 +19,7 @@ func MintOps(tx *evmClient.LoadedTransaction, startIndex int) []*RosettaTypes.Op
 			OperationIdentifier: &RosettaTypes.OperationIdentifier{
 				Index: int64(startIndex),
 			},
-			Type:   MintOpType,
+			Type:   common.MintOpType,
 			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
 			Account: &RosettaTypes.AccountIdentifier{
 				Address: tx.From.String(),

@@ -9,15 +9,18 @@ require (
 )
 
 require (
-	github.com/aristanetworks/goarista v0.0.0-20170210015632-ea17b1a17847 // indirect
-	github.com/btcsuite/btcd v0.22.1 // indirect
+	github.com/allegro/bigcache v1.2.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
-	github.com/elastic/gosigar v0.12.0 // indirect
+	github.com/fjl/memsize v0.0.1 // indirect
+	github.com/go-kit/kit v0.10.0 // indirect
+	github.com/onsi/ginkgo v1.16.4 // indirect
+	github.com/onsi/gomega v1.16.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
+	github.com/rs/cors v1.8.2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/steakknife/bloomfilter v0.0.0-20180922174646-6819c0d2a570 // indirect
-	github.com/steakknife/hamming v0.0.0-20180906055917-c99c65617cd3 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
+	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
@@ -31,7 +34,6 @@ require (
 	github.com/deckarep/golang-set v1.8.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
 	github.com/edsrzf/mmap-go v1.1.0 // indirect
-	github.com/ethereum-optimism/optimism/l2geth v0.0.0-20230126221930-d11d4ad7b7df
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/gballet/go-libpcsclite v0.0.0-20191108122812-4678299bea08 // indirect
 	github.com/go-ole/go-ole v1.2.1 // indirect
