@@ -13,6 +13,8 @@ import (
 	EthTypes "github.com/ethereum/go-ethereum/core/types"
 )
 
+// GetBlockReceipts returns [evmClient.RosettaTxReceipt] for a given blockhash.
+// Calls to eth_getTransactionReceipt are batched to reduce the number of RPC calls with a max batch size of 25.
 func (c *OpClient) GetBlockReceipts(
 	ctx context.Context,
 	blockHash common.Hash,

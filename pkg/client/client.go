@@ -3,14 +3,15 @@ package client
 import (
 	"fmt"
 
-	"github.com/coinbase/rosetta-geth-sdk/configuration"
-
 	evmClient "github.com/coinbase/rosetta-geth-sdk/client"
+	configuration "github.com/coinbase/rosetta-geth-sdk/configuration"
 )
 
 // OpClient wraps the [evmClient.SDKClient] to add Optimism-specific functionality.
+//
+//go:generate mockery --name OpClient --output ./mocks
 type OpClient struct {
-	*evmClient.SDKClient
+	InternalClient
 }
 
 // NewOpClient creates a client that can interact with the Optimism network.

@@ -19,7 +19,19 @@
   "all_in_memory_enabled": true,
   "table_size": 1,
   "value_log_file_size": 1024,
-  "construction": null,
+  "construction": {
+    "stale_depth": 3,
+    "broadcast_limit": 5,
+    "ignore_broadcast_failures": false,
+    "clear_broadcasts": true,
+    "constructor_dsl_file": "goerli.ros",
+    "quiet": false,
+    "initial_balance_fetch_disabled": false,
+    "end_conditions": {
+      "create_account": 10,
+      "transfer": 20
+    }
+  },
   "data": {
     "start_index": 4307133,
     "reconciliation_disabled": false,
