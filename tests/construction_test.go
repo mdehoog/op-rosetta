@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"testing"
 
-	rosettaGethClient "github.com/coinbase/rosetta-geth-sdk/client"
 	"github.com/coinbase/rosetta-geth-sdk/configuration"
 	construction "github.com/coinbase/rosetta-geth-sdk/services/construction"
 	rosettaGethTypes "github.com/coinbase/rosetta-geth-sdk/types"
@@ -52,11 +51,20 @@ func TestPreprocessERC20(t *testing.T) {
 		},
 	)
 	assert.Nil(t, err)
-	optionsRaw := `{"from":"0x9670d6977d0b10130E5d4916c9134363281B6B0e", "to":"0x705f9aE78b11a3ED5080c053Fa4Fa0c52359c674", "data":"0xa9059cbb000000000000000000000000705f9ae78b11a3ed5080c053fa4fa0c52359c674000000000000000000000000000000000000000000000000000000174876e800", "token_address":"0xF8B089026CaD7DDD8CB8d79036A1ff1d4233d64A", "value": "0x0"}`
-	var options rosettaGethClient.Options
-	assert.NoError(t, json.Unmarshal([]byte(optionsRaw), &options))
+	options := map[string]interface{}{
+		"from":  "0x9670d6977d0b10130E5d4916c9134363281B6B0e",
+		"to":    "0x705f9aE78b11a3ED5080c053Fa4Fa0c52359c674",
+		"value": "0x0",
+		"currency": map[string]interface{}{
+			"decimals": float64(18),
+			"symbol":   "OP",
+			"metadata": map[string]interface{}{
+				"contractAddress": "0xF8B089026CaD7DDD8CB8d79036A1ff1d4233d64A",
+			},
+		},
+	}
 	assert.Equal(t, &rosettaTypes.ConstructionPreprocessResponse{
-		Options: forceMarshalMap(t, &options),
+		Options: options,
 	}, preprocessResponse)
 }
 
@@ -125,34 +133,21 @@ func TestPreprocessGovernanceDelegate(t *testing.T) {
 		},
 	)
 	assert.Nil(t, err)
-	optionsRaw := `{"from":"0x9670d6977d0b10130E5d4916c9134363281B6B0e", "to":"0x705f9aE78b11a3ED5080c053Fa4Fa0c52359c674", "data":"0x5c19a95c000000000000000000000000705f9aE78b11a3ED5080c053Fa4Fa0c52359c674", "token_address":"0xF8B089026CaD7DDD8CB8d79036A1ff1d4233d64A", "value": "0x0"}`
-	var options rosettaGethClient.Options
-	assert.NoError(t, json.Unmarshal([]byte(optionsRaw), &options))
+	methodArgs := []interface{}{"0x705f9aE78b11a3ED5080c053Fa4Fa0c52359c674"}
+	options := map[string]interface{}{
+		"from":             "0x9670d6977d0b10130E5d4916c9134363281B6B0e",
+		"to":               "0x705f9aE78b11a3ED5080c053Fa4Fa0c52359c674",
+		"value":            "0x0",
+		"contract_address": "0xF8B089026CaD7DDD8CB8d79036A1ff1d4233d64A",
+		"data":             "0x5c19a95c000000000000000000000000705f9aE78b11a3ED5080c053Fa4Fa0c52359c674",
+		"method_signature": "delegate(address)",
+		"method_args":      methodArgs,
+		"currency": map[string]interface{}{
+			"decimals": float64(18),
+			"symbol":   "OP",
+		},
+	}
 	assert.Equal(t, &rosettaTypes.ConstructionPreprocessResponse{
-		Options: forceMarshalMap(t, &options),
+		Options: options,
 	}, preprocessResponse)
-}
-
-// marshalJSONMap converts an interface into a map[string]interface{}.
-func marshalJSONMap(i interface{}) (map[string]interface{}, error) {
-	b, err := json.Marshal(i)
-	if err != nil {
-		return nil, err
-	}
-
-	var m map[string]interface{}
-	if err := json.Unmarshal(b, &m); err != nil {
-		return nil, err
-	}
-
-	return m, nil
-}
-
-func forceMarshalMap(t *testing.T, i interface{}) map[string]interface{} {
-	m, err := marshalJSONMap(i)
-	if err != nil {
-		t.Fatalf("could not marshal map %s", rosettaTypes.PrintStruct(i))
-	}
-
-	return m
 }
