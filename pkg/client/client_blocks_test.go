@@ -90,15 +90,33 @@ func (testSuite *ClientBlocksTestSuite) TestGetBlockReceipts() {
 	}
 	testSuite.internalClient.On("BatchCallContext", ctx, mock.Anything).Return(nil).Run(func(args mock.Arguments) {
 		arg := args.Get(1).([]EthRpc.BatchElem)
-		arg[0].Result = ethReceipt
+		receipt := arg[0].Result.(**EthTypes.Receipt)
+		*receipt = &ethReceipt
+		// arg[0].Result = ethReceipt
 		arg[0].Error = nil
 	})
-	testSuite.internalClient.On("")
+
+	// Perform internal calculations
+	gasPrice, _ = SdkClient.EffectiveGasPrice(myTx, baseFee)
+	gasUsed := new(big.Int).SetUint64(ethReceipt.GasUsed)
+	feeAmount := new(big.Int).Mul(gasUsed, gasPrice)
+	if ethReceipt.L1Fee != nil {
+		feeAmount.Add(feeAmount, ethReceipt.L1Fee)
+	}
+	receiptJSON, _ := ethReceipt.MarshalJSON()
+	receipt := &SdkClient.RosettaTxReceipt{
+		Type:           ethReceipt.Type,
+		GasPrice:       gasPrice,
+		GasUsed:        gasUsed,
+		Logs:           ethReceipt.Logs,
+		RawMessage:     receiptJSON,
+		TransactionFee: feeAmount,
+	}
 
 	// Execute and validate the call
-	_, err := testSuite.client.GetBlockReceipts(ctx, hash, txs, baseFee)
-	testSuite.Equal(fmt.Errorf("error"), err)
-	// testSuite.Equal([]*SdkClient.RosettaTxReceipt{}, txReceipts)
+	txReceipts, err := testSuite.client.GetBlockReceipts(ctx, hash, txs, baseFee)
+	testSuite.NoError(err)
+	testSuite.Equal([]*SdkClient.RosettaTxReceipt{receipt}, txReceipts)
 }
 
 // TestGetBlockReceiptsBatchCallErrors tests fetching block receipts from the op client with failing batch calls.
