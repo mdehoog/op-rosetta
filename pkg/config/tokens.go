@@ -33,26 +33,27 @@ func UnmarshalTokenConfig(contents string) ([]configuration.Token, error) {
 	var outer map[string]interface{}
 	if err := json.Unmarshal([]byte(contents), &outer); err == nil {
 		for k, v := range outer {
-			for t, _ := range v.(map[string]interface{}) {
-				fmt.Printf("t: %s\n", t)
-				switch k {
-				case "Mainnet":
-					payload = append(payload, configuration.Token{
-						ChainID: 1,
-						Address: t,
-					})
-				case "Testnet":
-					payload = append(payload, configuration.Token{
-						ChainID: 420,
-						Address: t,
-					})
-				case "Goerli":
-					payload = append(payload, configuration.Token{
-						ChainID: 420,
-						Address: t,
-					})
-				default:
-					return nil, fmt.Errorf("unknown chain %s found when parsing json token list", k)
+			for t, b := range v.(map[string]interface{}) {
+				if b.(bool) {
+					switch k {
+					case "Mainnet":
+						payload = append(payload, configuration.Token{
+							ChainID: 1,
+							Address: t,
+						})
+					case "Testnet":
+						payload = append(payload, configuration.Token{
+							ChainID: 420,
+							Address: t,
+						})
+					case "Goerli":
+						payload = append(payload, configuration.Token{
+							ChainID: 420,
+							Address: t,
+						})
+					default:
+						return nil, fmt.Errorf("unknown chain %s found when parsing json token list", k)
+					}
 				}
 			}
 		}
