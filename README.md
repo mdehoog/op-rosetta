@@ -44,7 +44,7 @@ NETWORK=Goerli \
 ENABLE_TRACE_CACHE=true \
 ENABLE_GETH_TRACER=true \
 GETH=${OPTIMISM_GOERLI_NODE} \
-GENESIS_BLOCK_HASH=${OPTIMISM_GOERLI_GENESIS_BLOCK_HASH} \
+TRANSITION_BLOCK_HASH=${OPTIMISM_GOERLI_TRANSITION_BLOCK_HASH} \
 bin/op-rosetta
 ```
 
@@ -55,7 +55,7 @@ These parameters are configured as follows:
 - `BLOCKCHAIN` is `Optimism` and `NETWORK` is `Goerli`
 - We enable geth tracing and caching with `ENABLE_TRACE_CACHE` and `ENABLE_GETH_TRACER`
 - `GETH` points to a running op-geth *archive* node. This should be set in your `.env` file by setting `OPTIMISM_GOERLI_NODE` to a node url.
-- `GENESIS_BLOCK_HASH` is the block hash of the genesis block. This should be set in your `.env` file by setting `OPTIMISM_GOERLI_GENESIS_BLOCK_HASH` to the goerli bedrock genesis block hash.
+- `TRANSITION_BLOCK_HASH` is the block hash of the transition block. This should be set in your `.env` file by setting `OPTIMISM_GOERLI_TRANSITION_BLOCK_HASH` to the goerli bedrock transition block hash.
 
 A mainnet client can be run with `make run-optimism-mainnet`.
 
@@ -73,7 +73,7 @@ NETWORK=Mainnet \
 ENABLE_TRACE_CACHE=true \
 ENABLE_GETH_TRACER=true \
 GETH=${OPTIMISM_MAINNET_NODE} \
-GENESIS_BLOCK_HASH=${OPTIMISM_MAINNET_GENESIS_BLOCK_HASH} \
+TRANSITION_BLOCK_HASH=${OPTIMISM_MAINNET_TRANSITION_BLOCK_HASH} \
 bin/op-rosetta
 ```
 
@@ -84,7 +84,7 @@ These parameters are configured as follows:
 - `BLOCKCHAIN` is `Optimism` and `NETWORK` is `Mainnet`
 - We enable geth tracing and caching with `ENABLE_TRACE_CACHE` and `ENABLE_GETH_TRACER`
 - `GETH` points to a running op-geth *archive* node. This should be set in your `.env` file by setting `OPTIMISM_MAINNET_NODE` to a node url.
-- `GENESIS_BLOCK_HASH` is the block hash of the genesis block. This should be set in your `.env` file by setting `OPTIMISM_MAINNET_GENESIS_BLOCK_HASH` to the mainnet bedrock genesis block hash.
+- `TRANSITION_BLOCK_HASH` is the block hash of the transition block. This should be set in your `.env` file by setting `OPTIMISM_MAINNET_TRANSITION_BLOCK_HASH` to the mainnet bedrock transition block hash.
 
 
 ## Testing

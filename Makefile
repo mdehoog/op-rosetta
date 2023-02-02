@@ -80,7 +80,7 @@ run-optimism-goerli-construction-check:
 	ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli.json rosetta-cli check:construction configs/optimism/goerli.json
 
 # Runs an instance of `op-rosetta` configured for Optimism Goerli
-# For the genesis block hash, see:
+# For the transition (aka "genesis") block hash, see:
 # https://github.com/ethereum-optimism/optimism/blob/5e8bc3d5b4f36f0192b22b032e25b09f23cd0985/op-node/chaincfg/chains.go#L49
 run-optimism-goerli:
 	CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'	\
@@ -91,7 +91,7 @@ run-optimism-goerli:
 	GETH=${OPTIMISM_GOERLI_NODE} \
 	ENABLE_TRACE_CACHE=true \
     ENABLE_GETH_TRACER=true \
-	GENESIS_BLOCK_HASH=${OPTIMISM_GOERLI_GENESIS_BLOCK_HASH} \
+	TRANSITION_BLOCK_HASH=${OPTIMISM_GOERLI_TRANSITION_BLOCK_HASH} \
 	bin/op-rosetta
 
 #####################################################################################
@@ -111,7 +111,7 @@ run-optimism-mainnet-construction-check:
 	ROSETTA_CONFIGURATION_FILE=configs/optimism/mainnet.json rosetta-cli check:construction configs/optimism/mainnet.json
 
 # Runs an instance of `op-rosetta` configured for Optimism Mainnet
-# For the genesis block hash, see:
+# For the transition (aka "genesis") block hash, see:
 # https://github.com/ethereum-optimism/optimism/blob/5e8bc3d5b4f36f0192b22b032e25b09f23cd0985/op-node/chaincfg/chains.go
 run-optimism-mainnet:
 	CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'	\
@@ -122,6 +122,6 @@ run-optimism-mainnet:
 	ENABLE_TRACE_CACHE=true \
     ENABLE_GETH_TRACER=true \
 	GETH=${OPTIMISM_MAINNET_NODE} \
-	GENESIS_BLOCK_HASH=${OPTIMISM_MAINNET_GENESIS_BLOCK_HASH} \
+	TRANSITION_BLOCK_HASH=${OPTIMISM_MAINNET_TRANSITION_BLOCK_HASH} \
 	bin/op-rosetta
 

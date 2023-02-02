@@ -40,6 +40,10 @@ const (
 	// from which to read the genesis block hash.
 	GenesisBlockHashEnv = "GENESIS_BLOCK_HASH"
 
+	// TransitionBlockHashEnv is the environment variable
+	// from which to read the transition block hash.
+	TransitionBlockHashEnv = "TRANSITION_BLOCK_HASH"
+
 	// ChainConfigEnv is the environment variable from
 	// which to read the chain configuration, defined as
 	// JSON (or pointing to a JSON file).
