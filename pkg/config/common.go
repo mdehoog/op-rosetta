@@ -39,10 +39,6 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 
 	networkValue := os.Getenv(NetworkEnv)
 	transitionHash := os.Getenv(TransitionBlockHashEnv)
-	// If TransitionBlockHashEnv is not set, fallback to GenesisBlockHashEnv
-	if transitionHash == "" {
-		transitionHash = os.Getenv(GenesisBlockHashEnv)
-	}
 	transitionBlockHash := &RosettaTypes.BlockIdentifier{
 		Index: GenesisBlockIndex,
 		Hash:  transitionHash,

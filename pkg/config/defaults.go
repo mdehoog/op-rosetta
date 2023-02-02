@@ -36,10 +36,6 @@ const (
 	// read to determine network.
 	NetworkEnv = "NETWORK"
 
-	// GenesisBlockHashEnv is the environment variable
-	// from which to read the genesis block hash.
-	GenesisBlockHashEnv = "GENESIS_BLOCK_HASH"
-
 	// TransitionBlockHashEnv is the environment variable
 	// from which to read the transition block hash.
 	TransitionBlockHashEnv = "TRANSITION_BLOCK_HASH"
