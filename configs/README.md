@@ -30,6 +30,45 @@ To validate with `rosetta-cli`, run one of the following commands:
 
 * `rosetta-cli check:data --configuration-file optimism/config.json` - This command validates that the Data API implementation is correct using the ethereum `optimism` node. It also ensures that the implementation does not miss any balance-changing operations.
 
+> *Note*
+>
+> Running data validation takes a couple hours to completion. Once complete, the tool prints a report of any issues it encountered.
+> If it fails to do so, there's likely an issue in the implementation of the `op-rosetta` client.
+
+
+### Bedrock Compatibility
+
+The rosetta configuration file must have its start_index set to the Bedrock fork block. If it’s set to any prior block then validation fails as op-rosetta fails to parse OVM (pre-Bedrock) transactions. Here’s a sample rosetta configuration file:
+
+```
+{
+  "network": {
+    "blockchain": "Optimism",
+    "network": "goerli"
+  },
+  "online_url": "http://localhost:5000",
+  "data_directory": "/tmp/rosetta-cli-goerli-bedrock-db",
+  "http_timeout": 300,
+  "max_retries": 30,
+  "max_online_connections": 30,
+  "max_sync_concurrency": 30,
+  "tip_delay": 120,
+  "compression_disabled": true,
+  "construction": null,
+  "data": {
+    "historical_balance_disabled": false,
+    "active_reconciliation_concurrency": 30,
+    "start_index": 4307133,
+    "log_balance_changes": true,
+    "log_transactions": true,
+    "log_blocks": true,
+    "end_conditions": {
+        "tip": true
+    }
+  }
+}
+```
+
 
 ### Reference
 

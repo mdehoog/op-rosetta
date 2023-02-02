@@ -119,7 +119,6 @@ run-optimism-mainnet-construction-check:
 # For the genesis block hash, see:
 # https://github.com/ethereum-optimism/optimism/blob/5e8bc3d5b4f36f0192b22b032e25b09f23cd0985/op-node/chaincfg/chains.go
 run-optimism-mainnet:
-	make build \
 	CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'	\
 	MODE=ONLINE \
 	PORT=8080 \

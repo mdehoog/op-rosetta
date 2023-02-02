@@ -102,19 +102,15 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		}
 	}
 
-	tokenListJson := os.Getenv(TokenListEnv)
-	if file, err := os.ReadFile(tokenListJson); err == nil {
-		// if the envvar points to a file, read it; otherwise the envvar contents is expected to be JSON
-		tokenListJson = string(file)
-	}
-	if tokenListJson == "" {
-		tokenListJson = "[]"
-	}
-
-	var payload []configuration.Token
-	err = json.Unmarshal([]byte(tokenListJson), &payload)
+	// Graceful tokenlist unmarshalling
+	tokenListJsonFilename := os.Getenv(TokenListEnv)
+	tokenListJsonFile, err := ReadTokenConfig(tokenListJsonFilename)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing %s: %w", tokenListJson, err)
+		return nil, fmt.Errorf("unable to parse token list %s: %w", tokenListJsonFilename, err)
+	}
+	tokenWhiteList, err := UnmarshalTokenConfig([]byte(tokenListJsonFile), *chainConfig.ChainID)
+	if err != nil {
+		return nil, err
 	}
 
 	config.RosettaCfg = configuration.RosettaConfig{
@@ -126,7 +122,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		},
 		TracePrefix:     "optrace",
 		FilterTokens:    filterTokens,
-		TokenWhiteList:  payload,
+		TokenWhiteList:  tokenWhiteList,
 		SupportsSyncing: true,
 	}
 
