@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/coinbase/rosetta-geth-sdk/configuration"
 )
@@ -22,31 +23,32 @@ func ReadTokenConfig(filename string) (string, error) {
 }
 
 // UnmarshalTokenConfig attempts to construct a list of [configuration.Token] from a JSON file.
-func UnmarshalTokenConfig(contents string) ([]configuration.Token, error) {
+// Accepts variadic network IDs used to filter tokens.
+func UnmarshalTokenConfig(contents []byte, networks ...uint64) ([]configuration.Token, error) {
 	// Try to parse the file as a list of tokens.
 	var payload []configuration.Token
-	if err := json.Unmarshal([]byte(contents), &payload); err == nil {
-		return payload, nil
+	if err := json.Unmarshal(contents, &payload); err == nil {
+		return FilterNetworks(payload, networks...), nil
 	}
 
 	// If this fails, try the backwards-compatible token json format
 	var outer map[string]interface{}
-	if err := json.Unmarshal([]byte(contents), &outer); err == nil {
+	if err := json.Unmarshal(contents, &outer); err == nil {
 		for k, v := range outer {
 			for t, b := range v.(map[string]interface{}) {
 				if b.(bool) {
-					switch k {
-					case "Mainnet":
+					switch strings.ToLower(k) {
+					case "mainnet":
 						payload = append(payload, configuration.Token{
 							ChainID: 1,
 							Address: t,
 						})
-					case "Testnet":
+					case "testnet":
 						payload = append(payload, configuration.Token{
 							ChainID: 420,
 							Address: t,
 						})
-					case "Goerli":
+					case "goerli":
 						payload = append(payload, configuration.Token{
 							ChainID: 420,
 							Address: t,
@@ -57,8 +59,26 @@ func UnmarshalTokenConfig(contents string) ([]configuration.Token, error) {
 				}
 			}
 		}
-		return payload, nil
+		return FilterNetworks(payload, networks...), nil
 	}
 
 	return nil, fmt.Errorf("error parsing file contents as json token list")
+}
+
+// FilterNetworks filters a list of [configuration.Token] by network ID.
+func FilterNetworks(tokens []configuration.Token, networks ...uint64) []configuration.Token {
+	if len(networks) == 0 {
+		return tokens
+	}
+
+	filtered := []configuration.Token{}
+	for _, token := range tokens {
+		for _, network := range networks {
+			if token.ChainID == uint64(network) {
+				filtered = append(filtered, token)
+			}
+		}
+	}
+
+	return filtered
 }

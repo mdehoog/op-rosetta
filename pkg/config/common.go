@@ -108,7 +108,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to parse token list %s: %w", tokenListJsonFilename, err)
 	}
-	tokenWhiteList, err := UnmarshalTokenConfig(tokenListJsonFile)
+	tokenWhiteList, err := UnmarshalTokenConfig([]byte(tokenListJsonFile))
 	if err != nil {
 		return nil, err
 	}

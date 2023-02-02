@@ -33,9 +33,9 @@ func (testSuite *TokensTestSuite) TestUnmarshalOldTokenConfig() {
 			"0x7f5c764cbc14f9669b88837ca1490cca17c31607": true
 		}
 	}`
-	c, err := config.UnmarshalTokenConfig(contents)
+	c, err := config.UnmarshalTokenConfig([]byte(contents))
 	testSuite.NoError(err)
-	testSuite.Equal([]SdkConfiguration.Token{
+	testSuite.ElementsMatch([]SdkConfiguration.Token{
 		{
 			ChainID: 1,
 			Address: "0x4200000000000000000000000000000000000042",
@@ -69,9 +69,9 @@ func (testSuite *TokensTestSuite) TestUnmarshalOldTokenConfigExcluded() {
 			"0x7f5c764cbc14f9669b88837ca1490cca17c31607": false
 		}
 	}`
-	c, err := config.UnmarshalTokenConfig(contents)
+	c, err := config.UnmarshalTokenConfig([]byte(contents))
 	testSuite.NoError(err)
-	testSuite.Equal([]SdkConfiguration.Token{
+	testSuite.ElementsMatch([]SdkConfiguration.Token{
 		{
 			ChainID: 1,
 			Address: "0x4200000000000000000000000000000000000042",
@@ -79,6 +79,37 @@ func (testSuite *TokensTestSuite) TestUnmarshalOldTokenConfigExcluded() {
 		{
 			ChainID: 420,
 			Address: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+		},
+	}, c)
+}
+
+// TestUnmarshalOldTokenConfigCaseInsensitive tests unmarshalling the outdated token config json format with case insensitivity.
+func (testSuite *TokensTestSuite) TestUnmarshalOldTokenConfigCaseInsensitive() {
+	contents := `{
+		"MAINNET" : {
+			"0x4200000000000000000000000000000000000042": true
+		},
+		"tEsTneT" : {
+			"0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": true
+		},
+		"goerli" : {
+			"0x7f5c764cbc14f9669b88837ca1490cca17c31607": true
+		}
+	}`
+	c, err := config.UnmarshalTokenConfig([]byte(contents))
+	testSuite.NoError(err)
+	testSuite.ElementsMatch([]SdkConfiguration.Token{
+		{
+			ChainID: 1,
+			Address: "0x4200000000000000000000000000000000000042",
+		},
+		{
+			ChainID: 420,
+			Address: "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+		},
+		{
+			ChainID: 420,
+			Address: "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
 		},
 	}, c)
 }
@@ -101,9 +132,9 @@ func (testSuite *TokensTestSuite) TestUnmarshalTokenConfig() {
 			"decimals": 6
 		}
 	]`
-	c, err := config.UnmarshalTokenConfig(contents)
+	c, err := config.UnmarshalTokenConfig([]byte(contents))
 	testSuite.NoError(err)
-	testSuite.Equal([]SdkConfiguration.Token{
+	testSuite.ElementsMatch([]SdkConfiguration.Token{
 		{
 			ChainID:  1,
 			Address:  "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
@@ -116,6 +147,37 @@ func (testSuite *TokensTestSuite) TestUnmarshalTokenConfig() {
 			Address:  "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
 			Name:     "USDT",
 			Symbol:   "USDT",
+			Decimals: 6,
+		},
+	}, c)
+}
+
+// TestUnmarshalTokenConfigFilterNetworks tests unmarshalling the token config json format.
+func (testSuite *TokensTestSuite) TestUnmarshalTokenConfigFilterNetworks() {
+	contents := `[
+		{
+			"chainId": 1,
+			"address": "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+			"name": "USD Coin",
+			"symbol": "USDC",
+			"decimals": 6
+		},
+		{
+			"chainId": 420,
+			"address": "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+			"name": "USDT",
+			"symbol": "USDT",
+			"decimals": 6
+		}
+	]`
+	c, err := config.UnmarshalTokenConfig([]byte(contents), 1)
+	testSuite.NoError(err)
+	testSuite.ElementsMatch([]SdkConfiguration.Token{
+		{
+			ChainID:  1,
+			Address:  "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+			Name:     "USD Coin",
+			Symbol:   "USDC",
 			Decimals: 6,
 		},
 	}, c)
