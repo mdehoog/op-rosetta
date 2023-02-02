@@ -38,9 +38,10 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 	}
 
 	networkValue := os.Getenv(NetworkEnv)
-	genesisBlockHash := &RosettaTypes.BlockIdentifier{
+	transitionHash := os.Getenv(TransitionBlockHashEnv)
+	transitionBlockHash := &RosettaTypes.BlockIdentifier{
 		Index: GenesisBlockIndex,
-		Hash:  os.Getenv(GenesisBlockHashEnv),
+		Hash:  transitionHash,
 	}
 
 	chainConfigJson := os.Getenv(ChainConfigEnv)
@@ -62,7 +63,7 @@ func LoadConfiguration() (*configuration.Configuration, error) {
 		Blockchain: blockchain,
 		Network:    networkValue,
 	}
-	config.GenesisBlockIdentifier = genesisBlockHash
+	config.GenesisBlockIdentifier = transitionBlockHash
 	config.ChainConfig = chainConfig
 
 	config.GethURL = DefaultGethURL
