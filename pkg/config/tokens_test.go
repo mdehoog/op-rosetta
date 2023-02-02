@@ -1,6 +1,7 @@
 package config_test
 
 import (
+	"math/big"
 	"testing"
 
 	SdkConfiguration "github.com/coinbase/rosetta-geth-sdk/configuration"
@@ -152,6 +153,36 @@ func (testSuite *TokensTestSuite) TestUnmarshalTokenConfig() {
 	}, c)
 }
 
+// TestFilterNetworks tests filtering a list of tokens for networks.
+func (testSuite *TokensTestSuite) TestFilterNetworks() {
+	tokens := []SdkConfiguration.Token{
+		{
+			ChainID:  1,
+			Address:  "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+			Name:     "USD Coin",
+			Symbol:   "USDC",
+			Decimals: 6,
+		},
+	}
+	c := config.FilterNetworks(tokens, *big.NewInt(1))
+	testSuite.ElementsMatch(tokens, c)
+}
+
+// TestFilterNetworksNoMatch tests filtering a list of tokens for networks.
+func (testSuite *TokensTestSuite) TestFilterNetworksNoMatch() {
+	tokens := []SdkConfiguration.Token{
+		{
+			ChainID:  1,
+			Address:  "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+			Name:     "USD Coin",
+			Symbol:   "USDC",
+			Decimals: 6,
+		},
+	}
+	c := config.FilterNetworks(tokens, *big.NewInt(0))
+	testSuite.ElementsMatch([]SdkConfiguration.Token{}, c)
+}
+
 // TestUnmarshalTokenConfigFilterNetworks tests unmarshalling the token config json format.
 func (testSuite *TokensTestSuite) TestUnmarshalTokenConfigFilterNetworks() {
 	contents := `[
@@ -170,7 +201,7 @@ func (testSuite *TokensTestSuite) TestUnmarshalTokenConfigFilterNetworks() {
 			"decimals": 6
 		}
 	]`
-	c, err := config.UnmarshalTokenConfig([]byte(contents), 1)
+	c, err := config.UnmarshalTokenConfig([]byte(contents), *big.NewInt(1))
 	testSuite.NoError(err)
 	testSuite.ElementsMatch([]SdkConfiguration.Token{
 		{

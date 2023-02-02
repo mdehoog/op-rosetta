@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"os"
 	"strings"
 
@@ -24,7 +25,7 @@ func ReadTokenConfig(filename string) (string, error) {
 
 // UnmarshalTokenConfig attempts to construct a list of [configuration.Token] from a JSON file.
 // Accepts variadic network IDs used to filter tokens.
-func UnmarshalTokenConfig(contents []byte, networks ...uint64) ([]configuration.Token, error) {
+func UnmarshalTokenConfig(contents []byte, networks ...big.Int) ([]configuration.Token, error) {
 	// Try to parse the file as a list of tokens.
 	var payload []configuration.Token
 	if err := json.Unmarshal(contents, &payload); err == nil {
@@ -66,7 +67,7 @@ func UnmarshalTokenConfig(contents []byte, networks ...uint64) ([]configuration.
 }
 
 // FilterNetworks filters a list of [configuration.Token] by network ID.
-func FilterNetworks(tokens []configuration.Token, networks ...uint64) []configuration.Token {
+func FilterNetworks(tokens []configuration.Token, networks ...big.Int) []configuration.Token {
 	if len(networks) == 0 {
 		return tokens
 	}
@@ -74,7 +75,7 @@ func FilterNetworks(tokens []configuration.Token, networks ...uint64) []configur
 	filtered := []configuration.Token{}
 	for _, token := range tokens {
 		for _, network := range networks {
-			if token.ChainID == uint64(network) {
+			if token.ChainID == network.Uint64() {
 				filtered = append(filtered, token)
 			}
 		}
