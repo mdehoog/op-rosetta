@@ -79,6 +79,11 @@ run-optimism-goerli-data-check:
 run-optimism-goerli-construction-check:
 	ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli.json rosetta-cli check:construction configs/optimism/goerli.json
 
+# Runs the rosetta-cli check:construction command with the optimism goerli configuration
+run-optimism-goerli-erc20-construction-check:
+	ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli-erc20.json rosetta-cli check:construction configs/optimism/goerli.json
+
+
 # Runs an instance of `op-rosetta` configured for Optimism Goerli
 # For the transition (aka "genesis") block hash, see:
 # https://github.com/ethereum-optimism/optimism/blob/5e8bc3d5b4f36f0192b22b032e25b09f23cd0985/op-node/chaincfg/chains.go#L49
