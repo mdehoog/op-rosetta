@@ -76,6 +76,7 @@ func (c *OpClient) GetBlockReceipts(
 			// This is a hack to get around the fact that the RosettaTxReceipt doesn't contain L1 fees. We add the raw receipt here so we can access other rollup fields later
 			RawMessage:     receiptJSON,
 			TransactionFee: feeAmount,
+			Status:         ethReceipts[i].Status,
 		}
 
 		receipts[i] = receipt

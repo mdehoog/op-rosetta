@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	evmClient "github.com/coinbase/rosetta-geth-sdk/client"
-	"github.com/coinbase/rosetta-geth-sdk/services"
 	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/mdehoog/op-rosetta/pkg/handlers"
@@ -61,8 +60,7 @@ func (c *OpClient) ParseOps(
 
 	ops = append(ops, handlers.MintOps(tx, len(ops))...)
 	// ops = append(ops, handlers.BurnOps(tx, len(ops))...)
-	traceOps := services.TraceOps(tx.Trace, len(ops))
-	ops = append(ops, traceOps...)
+	ops = append(ops, handlers.TraceOps(tx.Trace, len(ops))...)
 
 	return ops, nil
 }
