@@ -111,6 +111,7 @@ func (testSuite *ClientBlocksTestSuite) TestGetBlockReceipts() {
 		Logs:           ethReceipt.Logs,
 		RawMessage:     receiptJSON,
 		TransactionFee: feeAmount,
+		Status:         ethReceipt.Status,
 	}
 
 	// Execute and validate the call
