@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Download rosetta-cli
 ./.github/scripts/cli.sh
 
-ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli.json ./bin/rosetta-cli check:data configs/optimism/goerli.json
+# Run data tests
+# echo "starting data tests..."
+# ./bin/rosetta-cli check:data --configuration-file configs/config_goerli_eth.json

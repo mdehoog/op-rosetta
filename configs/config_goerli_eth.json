@@ -1,0 +1,82 @@
+{
+    "network": {
+        "blockchain": "Base",
+        "network": "Goerli"
+    },
+    "online_url": "http://localhost:8080",
+    "data_directory": "cli-data",
+    "http_timeout": 300,
+    "max_retries": 15,
+    "max_online_connections": 500,
+    "max_sync_concurrency": 64,
+    "tip_delay": 120,
+    "compression_disabled":true,
+    "l0_in_memory_enabled": false,
+    "all_in_memory_enabled": false,
+    "data": {
+        "active_reconciliation_concurrency": 40,
+        "inactive_reconciliation_concurrency": 4,
+        "inactive_reconciliation_frequency": 250,
+        "initial_balance_fetch_disabled":false,
+        "log_blocks": true,
+        "log_transactions": true,
+        "log_balance_changes": true,
+        "log_reconciliations": true,
+        "exempt_accounts": "goerli_exempt_accounts.json",
+        "bootstrap_balances": "",
+        "end_conditions": {
+          "reconciliation_coverage": {
+            "coverage": 0.95,
+            "from_tip": true,
+            "tip": true
+          }
+        }
+    },
+    "construction": {
+      "offline_url": "http://localhost:8080",
+      "stale_depth": 3,
+      "broadcast_limit": 5,
+      "constructor_dsl_file": "goerli_eth.ros",
+      "prefunded_accounts":[
+        {
+          "privkey":"",
+          "account_identifier":{
+            "address":""
+          },
+          "curve_type":"secp256k1",
+          "currency":{
+            "symbol":"ETH",
+            "decimals": 18
+          }
+        },
+        {
+          "privkey":"",
+          "account_identifier":{
+            "address":""
+          },
+          "curve_type":"secp256k1",
+          "currency": {
+            "symbol": "USDC",
+            "decimals": 6,
+            "metadata": {
+                "contractAddress": ""
+            }
+          }
+        },
+        {
+          "privkey":"",
+          "account_identifier":{
+            "address":""
+          },
+          "curve_type":"secp256k1",
+          "currency":{
+            "symbol":"ETH",
+            "decimals": 18
+          }
+        }
+      ],
+      "end_conditions": {
+        "transfer": 1
+      }
+    }
+  }

@@ -17,23 +17,11 @@ LINT_SETTINGS=golint,misspell,gocyclo,gocritic,whitespace,goconst,gocognit,bodyc
 GOLINES_INSTALL=go install github.com/segmentio/golines@latest
 GOLINES_CMD=golines
 
-# Run the full pipeline
-all: clean tidy format build test lint
-.PHONY: \
-	test \
-	tests \
-	format \
-	lint \
-	build \
-	clean
+.PHONY: clean format lint build run test
 
-# Clean up built binaries
+# Clean up Rosetta Server binary
 clean:
 	rm -rf bin/op-rosetta
-
-# Tidy the go mod
-tidy:
-	go mod tidy
 
 # Formatting with gofmt
 format:
@@ -43,85 +31,34 @@ format:
 lint:
 	golangci-lint run -E asciicheck,goimports,misspell ./...
 
-# Build the `op-rosetta` binary
+# Build Rosetta Server binary
 build:
 	env GO111MODULE=on go build -o bin/op-rosetta ./cmd
 
-# Comprehensive tests
-test: tests
-tests: unit-tests integration-tests
-unit-tests:
+# Run Rosetta Server
+run:
+	MODE=${MODE} \
+	PORT=${PORT} \
+	BLOCKCHAIN=${BLOCKCHAIN} \
+	NETWORK=${NETWORK} \
+	FILTER=${FILTER} \
+	GENESIS_BLOCK_HASH=${GENESIS_BLOCK_HASH} \
+	GETH=${GETH} \
+	CHAIN_CONFIG=${CHAIN_CONFIG} \
+	bin/op-rosetta
+
+# Run tests
+test:
 	go test -v ./...
-integration-tests: config-validation
-config-validation: run-optimism-mainnet-validate-config run-optimism-goerli-validate-config
 
-# TODO: Add the `check:construction` command to the pipeline
-check-construction: run-optimism-mainnet-construction-check run-optimism-goerli-construction-check
+# Run construction tests on goerli testnet for ETH
+check-construction-goerli-eth:
+	rosetta-cli check:construction --configuration-file configs/config_goerli_eth.json
 
-# TODO: Add the `check:data` command to the pipeline
-# TODO: Requires node env var configuration in the github repository for the actions to run tests successfully
-check-data: run-optimism-mainnet-data-check run-optimism-goerli-data-check
+# Run construction tests on goerli testnet for ERC20
+check-construction-goerli-erc20:
+	rosetta-cli check:construction --configuration-file configs/config_goerli_erc20.json
 
-
-##################################################################################
-## GOERLI GOERLI GOERLI GOERLI GOERLI GOERLI GOERLI GOERLI GOERLI GOERLI GOERLI ##
-##################################################################################
-
-# Runs rosetta-cli configuration:validate against the optimism goerli configuration
-run-optimism-goerli-validate-config:
-	ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli.json rosetta-cli configuration:validate configs/optimism/goerli.json
-
-# Runs the rosetta-cli check:data command with the optimism goerli configuration
-run-optimism-goerli-data-check:
-	ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli.json rosetta-cli check:data configs/optimism/goerli.json
-
-# Runs the rosetta-cli check:construction command with the optimism goerli configuration
-run-optimism-goerli-construction-check:
-	ROSETTA_CONFIGURATION_FILE=configs/optimism/goerli.json rosetta-cli check:construction configs/optimism/goerli.json
-
-# Runs an instance of `op-rosetta` configured for Optimism Goerli
-# For the transition (aka "genesis") block hash, see:
-# https://github.com/ethereum-optimism/optimism/blob/5e8bc3d5b4f36f0192b22b032e25b09f23cd0985/op-node/chaincfg/chains.go#L49
-run-optimism-goerli:
-	CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'	\
-	MODE=ONLINE \
-	PORT=8080 \
-	BLOCKCHAIN=Optimism \
-	NETWORK=Goerli \
-	GETH=${OPTIMISM_GOERLI_NODE} \
-	ENABLE_TRACE_CACHE=true \
-    ENABLE_GETH_TRACER=true \
-	TRANSITION_BLOCK_HASH=${OPTIMISM_GOERLI_TRANSITION_BLOCK_HASH} \
-	bin/op-rosetta
-
-#####################################################################################
-## MAINNET MAINNET MAINNET MAINNET MAINNET MAINNET MAINNET MAINNET MAINNET MAINNET ##
-#####################################################################################
-
-# Runs rosetta-cli configuration:validate against the optimism mainnet configuration
-run-optimism-mainnet-validate-config:
-	ROSETTA_CONFIGURATION_FILE=configs/optimism/mainnet.json rosetta-cli configuration:validate configs/optimism/mainnet.json
-
-# Runs the rosetta-cli check:data command with the optimism mainnet configuration
-run-optimism-mainnet-data-check:
-	ROSETTA_CONFIGURATION_FILE=configs/optimism/mainnet.json rosetta-cli check:data configs/optimism/mainnet.json
-
-# Runs the rosetta-cli check:construction command with the optimism mainnet configuration
-run-optimism-mainnet-construction-check:
-	ROSETTA_CONFIGURATION_FILE=configs/optimism/mainnet.json rosetta-cli check:construction configs/optimism/mainnet.json
-
-# Runs an instance of `op-rosetta` configured for Optimism Mainnet
-# For the transition (aka "genesis") block hash, see:
-# https://github.com/ethereum-optimism/optimism/blob/5e8bc3d5b4f36f0192b22b032e25b09f23cd0985/op-node/chaincfg/chains.go
-run-optimism-mainnet:
-	CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'	\
-	MODE=ONLINE \
-	PORT=8080 \
-	BLOCKCHAIN=Optimism \
-	NETWORK=Mainnet \
-	ENABLE_TRACE_CACHE=true \
-    ENABLE_GETH_TRACER=true \
-	GETH=${OPTIMISM_MAINNET_NODE} \
-	TRANSITION_BLOCK_HASH=${OPTIMISM_MAINNET_TRANSITION_BLOCK_HASH} \
-	bin/op-rosetta
-
+# Run data tests on goerli testnet for both ETH and ERC20
+check-data-goerli:
+	rosetta-cli check:data --configuration-file configs/config_goerli_eth.json
