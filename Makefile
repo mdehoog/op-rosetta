@@ -51,14 +51,3 @@ run:
 test:
 	go test -v ./...
 
-# Run construction tests on goerli testnet for ETH
-check-construction-goerli-eth:
-	rosetta-cli check:construction --configuration-file configs/config_goerli_eth.json
-
-# Run construction tests on goerli testnet for ERC20
-check-construction-goerli-erc20:
-	rosetta-cli check:construction --configuration-file configs/config_goerli_erc20.json
-
-# Run data tests on goerli testnet for both ETH and ERC20
-check-data-goerli:
-	rosetta-cli check:data --configuration-file configs/config_goerli_eth.json

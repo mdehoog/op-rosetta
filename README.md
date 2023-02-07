@@ -27,25 +27,6 @@ CHAIN_CONFIG: '{ "chainId": <Chain ID>, "terminalTotalDifficultyPassed": true }'
 ```
 3. Run `make run` to run Rosetta Server
 
-## Run Rosetta Validation
-1. Follow [Run Rosetta Server](#run-rosetta-server)
-2. Update the following fields in the files of configs directory
-```
-For *.json file 
-construction.prefunded_accounts.privkey
-construction.prefunded_accounts.account_identifier.address
-construction.prefunded_accounts.currency.metadata.contractAddress
-
-For *.ros file
-currency contractAddress
-sender address
-recipient address
-```
-3. Run data or construction tests
-* Run `make check-construction-goerli-eth` for construction test for ETH on goerli
-* Run `check-construction-goerli-erc20` for construction test for ERC20 token on goerli
-* Run `check-data-goerli` for data test on goerli 
-
 ## Layout
 
 ```
@@ -53,7 +34,6 @@ recipient address
 │   └── rosetta.png
 ├── cmd
 │   └── main.go -> The `op-rosetta` executable entrypoint
-├── configs/ -> Config files for data and construction tests
 └── pkg
     ├── client/ -> Rosetta API client
     ├── common/ -> Standalone common functionality
