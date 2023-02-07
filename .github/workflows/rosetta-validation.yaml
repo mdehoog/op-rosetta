@@ -2,7 +2,6 @@ name: Rosetta Validation
 
 # on: [push]
 
-
 env:
   go_version: 1.19
   GO111MODULE: on

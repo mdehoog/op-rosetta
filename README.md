@@ -12,87 +12,20 @@ Provides Rosetta API compatibility for Optimism Bedrock, a low-cost and lightnin
 To learn more about the Rosetta API, you can find more online at [rosetta-api.org](https://www.rosetta-api.org/).
 
 
-## Setup
-
-First, clone the repository:
-
-```bash
-git clone https://github.com/mdehoog/op-rosetta.git
+## Run Rosetta Server
+1. Run `make build` to build Rosetta Server
+2. Configure the following environment variables
 ```
-
-Then, configure your own `.env` file by copying the contents of `.env.example` to `.env`.
-
-```bash
-cp .env.example .env
+MODE: ONLINE or OFFLINE
+PORT: Rosetta Server port
+BLOCKCHAIN: Blockchain (e.g. Optimism)
+NETWORK: Network (e.g. Goerli)
+FILTER: true (Rosetta Validation validates tokens according to the filter) or false (Rosetta Validation validates all tokens)
+GENESIS_BLOCK_HASH: Genesis block hash
+GETH: Native node URL
+CHAIN_CONFIG: '{ "chainId": <Chain ID>, "terminalTotalDifficultyPassed": true }'
 ```
-
-The `.env` variables will need to be configured.
-
-
-## Usage
-
-Run the `op-rosetta` client for goerli like so: `make run-optimism-goerli`.
-
-As part of the `run-optimism-goerli` step inside the [makefile](./Makefile), a few parameters are specified before running the `bin/op-rosetta` executable:
-
-```
-CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'	\
-MODE=ONLINE \
-PORT=8080 \
-BLOCKCHAIN=Optimism \
-NETWORK=Goerli \
-ENABLE_TRACE_CACHE=true \
-ENABLE_GETH_TRACER=true \
-GETH=${OPTIMISM_GOERLI_NODE} \
-TRANSITION_BLOCK_HASH=${OPTIMISM_GOERLI_TRANSITION_BLOCK_HASH} \
-bin/op-rosetta
-```
-
-These parameters are configured as follows:
-- `CHAIN_CONFIG` has the same field values as the genesis config’s. But only the `chainId` and `terminalTotalDifficultyPassed` values are needed.
-- Setting `MODE` to `ONLINE` permits outbound connections.
-- `PORT` is set to `8080` - the default connection for `rosetta-cli`.
-- `BLOCKCHAIN` is `Optimism` and `NETWORK` is `Goerli`
-- We enable geth tracing and caching with `ENABLE_TRACE_CACHE` and `ENABLE_GETH_TRACER`
-- `GETH` points to a running op-geth *archive* node. This should be set in your `.env` file by setting `OPTIMISM_GOERLI_NODE` to a node url.
-- `TRANSITION_BLOCK_HASH` is the block hash of the transition block. This should be set in your `.env` file by setting `OPTIMISM_GOERLI_TRANSITION_BLOCK_HASH` to the goerli bedrock transition block hash.
-
-A mainnet client can be run with `make run-optimism-mainnet`.
-
-> **Note**
-> Mainnet will only be supported once Optimism mainnet is upgraded to its Bedrock Release.
-
-The `run-optimism-mainnet` step inside the [makefile](./Makefile) specifies a similar set of variables as above:
-
-```
-CHAIN_CONFIG='{ "chainId": 10, "terminalTotalDifficultyPassed": true }'	\
-MODE=ONLINE \
-PORT=8080 \
-BLOCKCHAIN=Optimism \
-NETWORK=Mainnet \
-ENABLE_TRACE_CACHE=true \
-ENABLE_GETH_TRACER=true \
-GETH=${OPTIMISM_MAINNET_NODE} \
-TRANSITION_BLOCK_HASH=${OPTIMISM_MAINNET_TRANSITION_BLOCK_HASH} \
-bin/op-rosetta
-```
-
-These parameters are configured as follows:
-- `CHAIN_CONFIG` has the same field values as the genesis config’s. But only the `chainId` and `terminalTotalDifficultyPassed` values are needed.
-- Setting `MODE` to `ONLINE` permits outbound connections.
-- `PORT` is set to `8080` - the default connection for `rosetta-cli`.
-- `BLOCKCHAIN` is `Optimism` and `NETWORK` is `Mainnet`
-- We enable geth tracing and caching with `ENABLE_TRACE_CACHE` and `ENABLE_GETH_TRACER`
-- `GETH` points to a running op-geth *archive* node. This should be set in your `.env` file by setting `OPTIMISM_MAINNET_NODE` to a node url.
-- `TRANSITION_BLOCK_HASH` is the block hash of the transition block. This should be set in your `.env` file by setting `OPTIMISM_MAINNET_TRANSITION_BLOCK_HASH` to the mainnet bedrock transition block hash.
-
-
-## Testing
-
-_NOTE: `op-rosetta` must be running on the specified host and port provided in the configuration file. For local testing, this can be done as described in the [Running](#running) section, which will run an instance on localhost, port 8080._
-
-See [configs/README.md](./configs/README.md) for more information.
-
+3. Run `make run` to run Rosetta Server
 
 ## Layout
 
@@ -101,11 +34,8 @@ See [configs/README.md](./configs/README.md) for more information.
 │   └── rosetta.png
 ├── cmd
 │   └── main.go -> The `op-rosetta` executable entrypoint
-├── configs
-│   ├── optimism/ -> Optimism Mainnet and Goerli config files
-│   └── README.md
 └── pkg
-    ├── client/ -> Optimism Rosetta API client
+    ├── client/ -> Rosetta API client
     ├── common/ -> Standalone common functionality
     ├── config/ -> Configuration options
     ├── handlers/ -> Rosetta API handlers

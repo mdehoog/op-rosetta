@@ -15,4 +15,4 @@ jobs:
         with:
           go-version: ${{ env.go_version }}
       - name: run unit tests
-        run: make unit-tests
+        run: make test

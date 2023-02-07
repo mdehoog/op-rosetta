@@ -25,8 +25,8 @@ func main() {
 	cliApp.Flags = []cli.Flag{}
 	cliApp.Version = fmt.Sprintf("%s-%s-%s", Version, GitCommit, GitDate)
 	cliApp.Name = "op-rosetta"
-	cliApp.Usage = "Optimism Rosetta Service"
-	cliApp.Description = "Service for translating Optimism transactions into Rosetta Operations"
+	cliApp.Usage = "OP Stack Rosetta Service"
+	cliApp.Description = "Service for translating OP Stack transactions into Rosetta Operations"
 
 	// The main action of the app
 	cliApp.Action = utils.Bootstrap()
