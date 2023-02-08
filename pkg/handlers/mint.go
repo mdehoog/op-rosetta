@@ -4,7 +4,6 @@ import (
 	evmClient "github.com/coinbase/rosetta-geth-sdk/client"
 	sdkTypes "github.com/coinbase/rosetta-geth-sdk/types"
 	RosettaTypes "github.com/coinbase/rosetta-sdk-go/types"
-	log "github.com/ethereum/go-ethereum/log"
 	common "github.com/mdehoog/op-rosetta/pkg/common"
 )
 
@@ -13,18 +12,24 @@ func MintOps(tx *evmClient.LoadedTransaction, startIndex int) []*RosettaTypes.Op
 	if tx.Transaction.Mint() == nil {
 		return nil
 	}
-	log.Info("mint operation detected", "tx", tx.TxHash)
+
+	opIndex := int64(startIndex)
+	opType := common.MintOpType
+	opStatus := sdkTypes.SuccessStatus
+	toAddress := evmClient.MustChecksum(tx.Transaction.To().String())
+	amount := evmClient.Amount(tx.Transaction.Mint(), sdkTypes.Currency)
+
 	return []*RosettaTypes.Operation{
 		{
 			OperationIdentifier: &RosettaTypes.OperationIdentifier{
-				Index: int64(startIndex),
+				Index: opIndex,
 			},
-			Type:   common.MintOpType,
-			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
+			Type:   opType,
+			Status: RosettaTypes.String(opStatus),
 			Account: &RosettaTypes.AccountIdentifier{
-				Address: tx.From.String(),
+				Address: toAddress,
 			},
-			Amount: evmClient.Amount(tx.Transaction.Mint(), sdkTypes.Currency),
+			Amount: amount,
 		},
 	}
 }
