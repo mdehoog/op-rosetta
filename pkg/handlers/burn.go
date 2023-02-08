@@ -12,17 +12,14 @@ func BurnOps(tx *evmClient.LoadedTransaction, startIndex int) []*RosettaTypes.Op
 	if *tx.Transaction.To() != common.L2ToL1MessagePasser {
 		return nil
 	}
+
+	opIndex := int64(startIndex)
+	opType := common.BurnOpType
+	opStatus := sdkTypes.SuccessStatus
+	fromAddress := evmClient.MustChecksum(tx.From.String())
+	amount := evmClient.Amount(tx.Transaction.Value(), sdkTypes.Currency)
+
 	return []*RosettaTypes.Operation{
-		{
-			OperationIdentifier: &RosettaTypes.OperationIdentifier{
-				Index: int64(startIndex),
-			},
-			Type:   common.BurnOpType,
-			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
-			Account: &RosettaTypes.AccountIdentifier{
-				Address: tx.From.String(),
-			},
-			Amount: evmClient.Amount(tx.Transaction.Value(), sdkTypes.Currency),
-		},
+		GenerateOp(opIndex, nil, opType, opStatus, fromAddress, amount, nil),
 	}
 }
