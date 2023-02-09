@@ -45,17 +45,13 @@ func NativeInitializationOps(tx *evmClient.LoadedTransaction, startIndex int) []
 	}
 
 	// Return the associated operation
+	opIndex := int64(startIndex)
+	opType := sdkTypes.OpErc20Transfer
+	opStatus := sdkTypes.SuccessStatus
+	fromAddress := evmClient.MustChecksum(tx.From.String())
+	amount := evmClient.Erc20Amount(transferLog.Data, transferLog.Address, sdkTypes.Currency.Symbol, sdkTypes.Currency.Decimals, false)
+
 	return []*RosettaTypes.Operation{
-		{
-			OperationIdentifier: &RosettaTypes.OperationIdentifier{
-				Index: int64(startIndex),
-			},
-			Type:   sdkTypes.OpErc20Transfer,
-			Status: RosettaTypes.String(sdkTypes.SuccessStatus),
-			Account: &RosettaTypes.AccountIdentifier{
-				Address: tx.From.String(),
-			},
-			Amount: evmClient.Erc20Amount(transferLog.Data, transferLog.Address, sdkTypes.Currency.Symbol, sdkTypes.Currency.Decimals, false),
-		},
+		GenerateOp(opIndex, nil, opType, opStatus, fromAddress, amount, nil),
 	}
 }

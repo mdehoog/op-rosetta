@@ -20,16 +20,6 @@ func MintOps(tx *evmClient.LoadedTransaction, startIndex int) []*RosettaTypes.Op
 	amount := evmClient.Amount(tx.Transaction.Mint(), sdkTypes.Currency)
 
 	return []*RosettaTypes.Operation{
-		{
-			OperationIdentifier: &RosettaTypes.OperationIdentifier{
-				Index: opIndex,
-			},
-			Type:   opType,
-			Status: RosettaTypes.String(opStatus),
-			Account: &RosettaTypes.AccountIdentifier{
-				Address: toAddress,
-			},
-			Amount: amount,
-		},
+		GenerateOp(opIndex, nil, opType, opStatus, toAddress, amount, nil),
 	}
 }

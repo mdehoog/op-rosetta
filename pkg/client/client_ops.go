@@ -18,14 +18,11 @@ func (c *OpClient) ParseOps(
 	var ops []*RosettaTypes.Operation
 
 	if tx.Receipt.Type == L1ToL2DepositType && len(tx.Trace) > 0 && tx.Transaction.IsSystemTx() {
-		trace := tx.Trace[0]
-		traceType := strings.ToUpper(trace.Type)
-		opStatus := sdkTypes.SuccessStatus
-		from := evmClient.MustChecksum(trace.From.String())
-		to := evmClient.MustChecksum(trace.To.String())
-		metadata := map[string]interface{}{}
+		call := tx.Trace[0]
+		fromAddress := evmClient.MustChecksum(call.From.String())
+		toAddress := evmClient.MustChecksum(call.To.String())
 
-		if from != to {
+		if fromAddress != toAddress {
 			feeOps, err := handlers.FeeOps(tx)
 			if err != nil {
 				return nil, err
@@ -33,21 +30,12 @@ func (c *OpClient) ParseOps(
 			ops = append(ops, feeOps...)
 		}
 
-		toOp := &RosettaTypes.Operation{
-			OperationIdentifier: &RosettaTypes.OperationIdentifier{
-				Index: int64(len(ops) + 0),
-			},
-			Type:   traceType,
-			Status: RosettaTypes.String(opStatus),
-			Account: &RosettaTypes.AccountIdentifier{
-				Address: to,
-			},
-			Amount: &RosettaTypes.Amount{
-				Value:    trace.Value.String(),
-				Currency: sdkTypes.Currency,
-			},
-			Metadata: metadata,
-		}
+		opIndex := int64(len(ops) + 0)
+		opType := strings.ToUpper(call.Type)
+		opStatus := sdkTypes.SuccessStatus
+		toAmount := evmClient.Amount(call.Value, sdkTypes.Currency)
+
+		toOp := handlers.GenerateOp(opIndex, nil, opType, opStatus, toAddress, toAmount, nil)
 		ops = append(ops, toOp)
 		return ops, nil
 	}
@@ -59,7 +47,7 @@ func (c *OpClient) ParseOps(
 	ops = append(ops, feeOps...)
 
 	ops = append(ops, handlers.MintOps(tx, len(ops))...)
-	// ops = append(ops, handlers.BurnOps(tx, len(ops))...)
+	ops = append(ops, handlers.BurnOps(tx, len(ops))...)
 	ops = append(ops, handlers.TraceOps(tx.Trace, len(ops))...)
 
 	return ops, nil
