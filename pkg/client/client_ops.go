@@ -47,7 +47,7 @@ func (c *OpClient) ParseOps(
 	ops = append(ops, feeOps...)
 
 	ops = append(ops, handlers.MintOps(tx, len(ops))...)
-	ops = append(ops, handlers.BurnOps(tx, len(ops))...)
+	// ops = append(ops, handlers.BurnOps(tx, len(ops))...)
 	ops = append(ops, handlers.TraceOps(tx.Trace, len(ops))...)
 
 	return ops, nil
