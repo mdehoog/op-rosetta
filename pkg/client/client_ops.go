@@ -17,7 +17,7 @@ func (c *OpClient) ParseOps(
 ) ([]*RosettaTypes.Operation, error) {
 	var ops []*RosettaTypes.Operation
 
-	if tx.Receipt.Type == L1ToL2DepositType && len(tx.Trace) > 0 && tx.Transaction.IsSystemTx() {
+	if tx.Receipt.Type == L1ToL2DepositType && len(tx.Trace) > 0 {
 		call := tx.Trace[0]
 		fromAddress := evmClient.MustChecksum(call.From.String())
 		toAddress := evmClient.MustChecksum(call.To.String())
@@ -46,8 +46,8 @@ func (c *OpClient) ParseOps(
 	}
 	ops = append(ops, feeOps...)
 
-	ops = append(ops, handlers.MintOps(tx, len(ops))...)
-	ops = append(ops, handlers.BurnOps(tx, len(ops))...)
+	// ops = append(ops, handlers.MintOps(tx, len(ops))...)
+	// ops = append(ops, handlers.BurnOps(tx, len(ops))...)
 	ops = append(ops, handlers.TraceOps(tx.Trace, len(ops))...)
 
 	return ops, nil
