@@ -9,6 +9,7 @@ import (
 
 // BurnOps constructs a list of [RosettaTypes.Operation]s for an Optimism Withdrawal or "burn" transaction.
 func BurnOps(tx *evmClient.LoadedTransaction, startIndex int) []*RosettaTypes.Operation {
+	// tx's To address could be nil, if the type == CREATE, it will break
 	if *tx.Transaction.To() != common.L2ToL1MessagePasser {
 		return nil
 	}
