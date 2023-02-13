@@ -16,7 +16,7 @@ func MintOps(tx *evmClient.LoadedTransaction, startIndex int) []*RosettaTypes.Op
 	opIndex := int64(startIndex)
 	opType := common.MintOpType
 	opStatus := sdkTypes.SuccessStatus
-	toAddress := evmClient.MustChecksum(tx.Transaction.To().String())
+	toAddress := evmClient.MustChecksum(tx.Trace[len(tx.Trace)-1].To.String())
 	amount := evmClient.Amount(tx.Transaction.Mint(), sdkTypes.Currency)
 
 	return []*RosettaTypes.Operation{
