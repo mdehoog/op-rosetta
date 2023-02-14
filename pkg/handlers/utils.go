@@ -7,7 +7,6 @@ import (
 )
 
 const (
-	proxyContractPrefix          = "0x42"
 	proxyContractFilter          = "0x420000000000000000000000000000000000"
 	implementationContractFilter = "0xc0d3c0d3c0d3c0d3c0d3c0d3c0d3c0d3c0d3"
 )
