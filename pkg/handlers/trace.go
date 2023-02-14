@@ -24,6 +24,9 @@ func TraceOps(
 		opType := strings.ToUpper(call.Type)
 		fromAddress := evmClient.MustChecksum(call.From.String())
 		toAddress := evmClient.MustChecksum(call.To.String())
+		if strings.Contains(fromAddress, proxyContractFilter) && isIdenticalContractAddress(fromAddress, toAddress) {
+			toAddress = fromAddress
+		}
 		value := call.Value
 		metadata := map[string]interface{}{}
 

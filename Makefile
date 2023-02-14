@@ -50,4 +50,3 @@ run:
 # Run tests
 test:
 	go test -v ./...
-

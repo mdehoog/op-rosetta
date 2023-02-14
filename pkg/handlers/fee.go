@@ -23,11 +23,13 @@ func FeeOps(tx *evmClient.LoadedTransaction) ([]*RosettaTypes.Operation, error) 
 	}
 
 	sequencerFeeAmount := new(big.Int).Set(tx.FeeAmount)
+	L1Fee := big.NewInt(0)
 	if tx.FeeBurned != nil {
 		sequencerFeeAmount.Sub(sequencerFeeAmount, tx.FeeBurned)
 	}
 	if receipt.L1Fee != nil {
-		sequencerFeeAmount.Sub(sequencerFeeAmount, receipt.L1Fee)
+		L1Fee = receipt.L1Fee
+		sequencerFeeAmount.Sub(sequencerFeeAmount, L1Fee)
 	}
 	if sequencerFeeAmount == nil {
 		return nil, nil
@@ -62,7 +64,7 @@ func FeeOps(tx *evmClient.LoadedTransaction) ([]*RosettaTypes.Operation, error) 
 		},
 	}
 	L1FeeVaultAddress := common.L1FeeVault.Hex()
-	L1FeeVaultAmount := evmClient.Amount(receipt.L1Fee, sdkTypes.Currency)
+	L1FeeVaultAmount := evmClient.Amount(L1Fee, sdkTypes.Currency)
 
 	ops := []*RosettaTypes.Operation{
 		GenerateOp(0, nil, opType, opStatus, fromAddress, fromAmount, nil),
